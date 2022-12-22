@@ -31,7 +31,7 @@ const App = () => {
           type: 'LOGGED_IN_USER',
           payload: {
             email: user.email,
-            token: idTokenResult,
+            token: idTokenResult.token,
           }
         });
       }
