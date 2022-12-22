@@ -8,6 +8,8 @@ const Register = () => {
   const [email, setEmail] = useState("");
 
   const auth = getAuth();
+
+  
   const handleSubmit = async (e) => {
 
     e.preventDefault();
@@ -32,12 +34,12 @@ const Register = () => {
       <input
         type="email"
         className="form-control"
-        placeholder="E-mail"
+        placeholder="Your e-mail"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         autoFocus
       />
-
+      <br /> 
       <button type="submit" className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
         Register
       </button>
