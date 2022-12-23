@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase";
 import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 import { toast } from 'react-toastify';
+import { Button } from 'antd';
 
 const Register = () => {
 
@@ -9,7 +10,7 @@ const Register = () => {
 
   const auth = getAuth();
 
-  
+
   const handleSubmit = async (e) => {
 
     e.preventDefault();
@@ -40,9 +41,9 @@ const Register = () => {
         autoFocus
       />
       <br /> 
-      <button type="submit" className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+      <Button onClick={handleSubmit} type="primary" block size="large">
         Register
-      </button>
+      </Button>
     </form>
   );
 
