@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { auth } from "../../firebase";
-import { getAuth, sendSignInLinkToEmail, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, sendSignInLinkToEmail, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
-import { MailOutlined } from '@ant-design/icons';
+import { MailOutlined, LoadingOutlined, GoogleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
 const Login = ({ history }) => {
@@ -11,6 +11,8 @@ const Login = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const googleProvider = new GoogleAuthProvider();
 
   const auth = getAuth();
 
@@ -39,6 +41,26 @@ const Login = ({ history }) => {
       setLoading(false);
     }
 
+  };
+
+  const googleLogin = async () => {
+    signInWithPopup(auth, googleProvider).then(async (result) => {
+      console.log("46 erdh");
+      const { user } = result;
+      const idTokenResult = await user.getIdTokenResult();
+      dispatch({
+        type: "LOGGED_IN_USER",
+        payload: {
+          email: user.email,
+          token: idTokenResult.token,
+        }
+      });
+      history.push('/');
+    })
+    .catch(error => {
+      console.log(error)
+      toast.error(error.message)
+    });
   };
 
   const loginForm = () => (
@@ -74,8 +96,8 @@ const Login = ({ history }) => {
         block
         size="large"
         shape="round"
-        icon={<MailOutlined />}
-        className="mb-3"
+        icon={loading ? <LoadingOutlined /> : <MailOutlined />}
+        className="mb-2"
         disabled={!email || password.length < 6}
       >
         Login
@@ -91,6 +113,20 @@ const Login = ({ history }) => {
           <h4>Log in</h4>
 
           {loginForm()}
+
+          <Button
+            onClick={googleLogin}
+            type="default"
+            block
+            size="large"
+            shape="round"
+            icon={<GoogleOutlined />}
+            className="mb-3"
+          // disabled={!email || password.length < 6}
+          >
+            Login with Google
+          </Button>
+
         </div>
       </div>
     </div>
