@@ -10,7 +10,7 @@ import './index.css';
 import App from './App';
 import 'antd/dist/antd.css';
 
-const store = configureStore({ reducer: {rootReducer}, composeWithDevTools })
+const store = configureStore({ reducer: rootReducer})
 
 
 ReactDOM.render(
