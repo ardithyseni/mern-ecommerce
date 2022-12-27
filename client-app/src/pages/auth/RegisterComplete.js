@@ -42,7 +42,7 @@ const RegisterComplete = ({ history }) => {
                 await user.updatePassword(password);
                 const userTokenId = user.getIdTokenResult();
                 // populate user in redux store, 
-                
+                console.log("user", user, "idTokenResult", userTokenId);
                 // redirect
                 history.push('/');
             }

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { toast } from 'react-toastify';
+import { useSelector } from "react-redux"
 import { LoadingOutlined } from '@ant-design/icons';
+import { useHistory } from "react-router-dom";
 
 
 
@@ -9,6 +11,12 @@ const ForgotPassword = ({ history }) => {
 
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const { user } = useSelector((state) => ({ ...state }));
+
+    useLayoutEffect(() => {
+        if (user && user.token) history.push('/');
+    }, [user]);
 
     const auth = getAuth();
 
@@ -50,7 +58,7 @@ const ForgotPassword = ({ history }) => {
                     className="btn btn-raised"
                     disabled={!email}
                 >
-                    {loading ? <LoadingOutlined style={{ fontSize: '16px'}} /> : "Submit"}
+                    {loading ? <LoadingOutlined style={{ fontSize: '16px' }} /> : "Submit"}
                 </button>
             </form>
         </div>

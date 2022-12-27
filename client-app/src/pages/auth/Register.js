@@ -1,21 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth } from "../../firebase";
+import { useSelector } from "react-redux"
 import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
 
-const Register = () => {
+const Register = ({ history }) => {
 
   const [email, setEmail] = useState("");
 
-  const auth = getAuth();
+  const { user } = useSelector((state) => ({ ...state }));
 
+  useEffect(() => {
+    if (user && user.token) history.push('/');
+  }, [user]);
+
+
+  const auth = getAuth();
 
   const handleSubmit = async (e) => {
 
     e.preventDefault();
     // console.log("ENV --->", process.env.REACT_APP_REGISTER_REDIRECT_URL);
-    const actionCodeSettings  = {
+    const actionCodeSettings = {
       url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
       handleCodeInApp: true,
     };
@@ -40,7 +47,7 @@ const Register = () => {
         onChange={(e) => setEmail(e.target.value)}
         autoFocus
       />
-      <br /> 
+      <br />
       <Button onClick={handleSubmit} type="primary" block size="large">
         Register
       </Button>
@@ -53,7 +60,7 @@ const Register = () => {
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <h4>Register</h4>
-          
+
           {registerForm()}
         </div>
       </div>
