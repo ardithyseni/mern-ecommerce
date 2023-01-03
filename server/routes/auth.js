@@ -1,9 +1,9 @@
-const express = require("express");
+import express from 'express';
 
 const router = express.Router();
 
-const { createOrUpdateUser } = require("../controllers/auth");
+import { createOrUpdateUser } from "../controllers/auth.js";
 
 router.get("/create-or-update-user", createOrUpdateUser);
 
-module.exports = router;
+export default router;
