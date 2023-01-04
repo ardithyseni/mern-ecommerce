@@ -6,7 +6,7 @@ node_modules
 /.pnp
 .pnp.js
 .env
-/server/config/fbServiceAccountKey.json
+fbServiceAccountKey.json
 
 # testing
 /coverage
