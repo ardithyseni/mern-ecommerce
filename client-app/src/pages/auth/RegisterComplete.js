@@ -39,7 +39,7 @@ const RegisterComplete = ({ history }) => {
                 window.localStorage.removeItem("emailForRegistration");
                 // get user id token
                 let user = auth.currentUser;
-                await user.updatePassword(password);
+                await user.updatePassword(user, password);
                 const userTokenId = user.getIdTokenResult();
                 // populate user in redux store, 
                 console.log("user", user, "idTokenResult", userTokenId);

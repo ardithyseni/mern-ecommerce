@@ -9,12 +9,12 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 
 
-const createOrUpdateUser = async (authToken) => {
+const createOrUpdateUser = async (idToken) => {
   return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
     {},
     {
       headers: {
-        authToken: authToken,
+        idToken,
       }
     })
 }
