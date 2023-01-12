@@ -8,7 +8,7 @@ export const createOrUpdateUser = async (req, res) => {
             email: email // first argument, find by what
         },
         {
-            name: name, // what to update
+            name: email.split("@")[0], // what to update
             picture: picture
         },
         { new: true } // return new updated info
@@ -20,7 +20,7 @@ export const createOrUpdateUser = async (req, res) => {
     } else {
         const newUser = await new User({
             email, 
-            name, 
+            name: email.split("@")[0], 
             picture,
         }).save();
         console.log('User created: ', newUser);

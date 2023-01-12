@@ -4,15 +4,7 @@ import { getAuth, sendSignInLinkToEmail, createUserWithEmailAndPassword } from "
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-
-
-const createOrUpdateUser = async (idToken) => {
-  return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
-    {
-      idToken: idToken
-    })
-}
+import { createOrUpdateUser } from "../../functions/authFunctions";
 
 
 const Register = ({ history }) => {
@@ -57,7 +49,7 @@ const Register = ({ history }) => {
     let user = auth.currentUser;
 
     const idTokenResult = await user.getIdTokenResult();
-    
+
     createOrUpdateUser(idTokenResult.token)
         .then((res) => {
           dispatch({

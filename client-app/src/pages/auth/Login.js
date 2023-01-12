@@ -6,9 +6,10 @@ import { Button } from 'antd';
 import { MailOutlined, LoadingOutlined, GoogleOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import axios from "axios";
+import { createOrUpdateUser } from "../../functions/authFunctions";
 
 
+// old buggy code why send token in headers,,, its not reading it
 // const createOrUpdateUser = async (idToken) => {
 //   return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
 //     {},
@@ -19,12 +20,12 @@ import axios from "axios";
 //     })
 // }
 
-const createOrUpdateUser = async (idToken) => {
-  return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
-    {
-      idToken: idToken
-    })
-}
+// const createOrUpdateUser = async (idToken) => {
+//   return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
+//     {
+//       idToken: idToken
+//     })
+// }
 
 const Login = ({ history }) => {
 
