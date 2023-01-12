@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../../firebase";
-import { useSelector } from "react-redux"
 import { getAuth, sendSignInLinkToEmail, createUserWithEmailAndPassword } from "firebase/auth";
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+
+
+const createOrUpdateUser = async (idToken) => {
+  return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
+    {
+      idToken: idToken
+    })
+}
+
 
 const Register = ({ history }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -43,6 +54,25 @@ const Register = ({ history }) => {
 
     await createUserWithEmailAndPassword(auth, email, password)
     
+    let user = auth.currentUser;
+
+    const idTokenResult = await user.getIdTokenResult();
+    
+    createOrUpdateUser(idTokenResult.token)
+        .then((res) => {
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload: {
+              name: res.data.name,
+              email: res.data.email,
+              token: idTokenResult.token,
+              role: res.data.role,
+              _id: res.data._id,
+            }
+          });
+        })
+        .catch((error) => console.log(error));
+
     history.push('/');
   };
 

@@ -20,9 +20,10 @@ import axios from "axios";
 // }
 
 const createOrUpdateUser = async (idToken) => {
-  return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`, {
-    idToken: idToken
-  })
+  return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
+    {
+      idToken: idToken
+    })
 }
 
 const Login = ({ history }) => {
@@ -54,17 +55,21 @@ const Login = ({ history }) => {
       console.log("idtokenresult..tokenn", idTokenResult.token)
 
       createOrUpdateUser(idTokenResult.token)
-        .then((res) => console.log("CREATE OR UPDATE RES", res))
+        .then((res) => {
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload: {
+              name: res.data.name,
+              email: res.data.email,
+              token: idTokenResult.token,
+              role: res.data.role,
+              _id: res.data._id,
+            }
+          });
+        })
         .catch((error) => console.log(error));
 
-      // dispatch({
-      //   type: "LOGGED_IN_USER",
-      //   payload: {
-      //     email: user.email,
-      //     token: idTokenResult.token,
-      //   }
-      // });
-      // history.push('/');
+      history.push('/');
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -78,13 +83,20 @@ const Login = ({ history }) => {
       console.log("46 erdh");
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
-      dispatch({
-        type: "LOGGED_IN_USER",
-        payload: {
-          email: user.email,
-          token: idTokenResult.token,
-        }
-      });
+      createOrUpdateUser(idTokenResult.token)
+        .then((res) => {
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload: {
+              name: res.data.name,
+              email: res.data.email,
+              token: idTokenResult.token,
+              role: res.data.role,
+              _id: res.data._id,
+            }
+          });
+        })
+        .catch((error) => console.log(error));
       history.push('/');
     })
       .catch(error => {
