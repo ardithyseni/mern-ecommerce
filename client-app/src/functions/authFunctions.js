@@ -6,3 +6,11 @@ export const createOrUpdateUser = async (idToken) => {
             idToken: idToken
         })
 }
+
+
+export const getCurrentUser = async (idToken) => {
+    return await axios.post(`${process.env.REACT_APP_API}/current-user`,
+    {
+        idToken: idToken
+    })
+}

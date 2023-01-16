@@ -27,3 +27,12 @@ export const createOrUpdateUser = async (req, res) => {
         res.json(newUser);
     }
 };
+
+
+export const getCurrentUser = async (req, res) => {
+    User.findOne({email: req.user.email }).exec((err, user) => {
+        if (err) throw new Error(err)
+
+        res.json(user);
+    } );
+};

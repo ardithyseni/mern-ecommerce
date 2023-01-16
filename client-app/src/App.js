@@ -11,7 +11,7 @@ import RegisterComplete from './pages/auth/RegisterComplete';
 import Home from './pages/Home';
 import Header from './components/nav/Header';
 import ForgotPassword from './pages/auth/ForgotPassword';
-
+import { getCurrentUser } from './functions/authFunctions';
 
 
 const App = () => {
@@ -27,14 +27,28 @@ const App = () => {
         const idTokenResult = await user.getIdTokenResult();
         console.log('IDTOKENRESULLTTTTWE1231231', idTokenResult);
         console.log("user: ", user);
-        dispatch({
-          // type & payload
-          type: 'LOGGED_IN_USER',
-          payload: {
-            email: user.email,
-            token: idTokenResult.token,
-          }
-        });
+        // dispatch({
+        //   // type & payload
+        //   type: 'LOGGED_IN_USER',
+        //   payload: {
+        //     email: user.email,
+        //     token: idTokenResult.token,
+        //   }
+        // });
+        getCurrentUser(idTokenResult.token)
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                name: res.data.name,
+                email: res.data.email,
+                token: idTokenResult.token,
+                role: res.data.role,
+                _id: res.data._id,
+              }
+            });
+          })
+          .catch((error) => console.log(error));
       }
     })
     // clean up
