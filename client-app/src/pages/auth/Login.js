@@ -5,27 +5,10 @@ import { toast } from 'react-toastify';
 import { Button } from 'antd';
 import { MailOutlined, LoadingOutlined, GoogleOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { createOrUpdateUser } from "../../functions/authFunctions";
 
 
-// old buggy code why send token in headers,,, its not reading it
-// const createOrUpdateUser = async (idToken) => {
-//   return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
-//     {},
-//     {
-//       headers: {
-//         idToken,
-//       }
-//     })
-// }
-
-// const createOrUpdateUser = async (idToken) => {
-//   return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`,
-//     {
-//       idToken: idToken
-//     })
-// }
 
 const Login = ({ history }) => {
 
@@ -37,6 +20,17 @@ const Login = ({ history }) => {
   useEffect(() => {
     if (user && user.token) history.push('/');
   }, [user]);
+
+
+  const roleBasedRedirect = (res) => {
+    if (res.data.role === 'admin') {
+      history.push('/admin/dashboard');
+    } else {
+      history.push('/user/history')
+    }
+  }
+
+
 
   const googleProvider = new GoogleAuthProvider();
 
@@ -67,10 +61,12 @@ const Login = ({ history }) => {
               _id: res.data._id,
             }
           });
+          roleBasedRedirect(res)
         })
         .catch((error) => console.log(error));
 
-      history.push('/');
+      // history.push('/');
+
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -96,9 +92,10 @@ const Login = ({ history }) => {
               _id: res.data._id,
             }
           });
+          roleBasedRedirect(res);
         })
         .catch((error) => console.log(error));
-      history.push('/');
+      // history.push('/');
     })
       .catch(error => {
         console.log(error)
