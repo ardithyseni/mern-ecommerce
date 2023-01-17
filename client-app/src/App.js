@@ -14,6 +14,8 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import { getCurrentUser } from './functions/authFunctions';
 import UserRoute from './components/routes/UserRoute';
 import UserHistory from './pages/user/UserHistory';
+import UserWishlist from './pages/user/UserWishlist';
+import UserPassword from './pages/user/UserPassword';
 
 
 const App = () => {
@@ -69,6 +71,8 @@ const App = () => {
         <Route exact path="/register/complete" component={RegisterComplete} />
         <Route exact path="/passwordreset" component={ForgotPassword} />
         <UserRoute exact path="/user/history" component={UserHistory} />
+        <UserRoute exact path="/user/password" component={UserPassword} />
+        <UserRoute exact path="/user/wishlist" component={UserWishlist} />
       </Switch>
     </>
   );
