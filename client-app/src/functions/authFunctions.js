@@ -14,3 +14,11 @@ export const getCurrentUser = async (idToken) => {
         idToken: idToken
     })
 }
+
+
+export const getCurrentAdmin = async (idToken) => {
+    return await axios.post(`${process.env.REACT_APP_API}/current-admin`,
+    {
+        idToken: idToken
+    })
+}

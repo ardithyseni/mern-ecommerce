@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import { createOrUpdateUser, getCurrentUser } from "../controllers/auth.js";
-import { authCheck } from '../middlewares/auth.js';
+import { authCheck, adminCheck } from '../middlewares/auth.js';
 
 // middlewares
 
@@ -15,6 +15,8 @@ import { authCheck } from '../middlewares/auth.js';
 router.post("/create-or-update-user", authCheck, createOrUpdateUser);
 
 router.post("/current-user", authCheck, getCurrentUser);
+
+router.post("/current-admin", authCheck, adminCheck, getCurrentUser);
 
 // router.get('/testing', myMiddleware, (req, res) => {
 //     res.json({
