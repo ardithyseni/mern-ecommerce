@@ -1,7 +1,7 @@
 import { getAuth, signInWithEmailLink } from "firebase/auth";
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { auth } from "../../firebase";
+// import { auth } from "../../firebase";
 // import { getAuth, sendSignInLinkToEmail } from "firebase/auth";
 // import { toast } from 'react-toastify';
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import UserNav from '../../components/nav/UserNav';
-import auth from '../../firebase'
 import { toast } from 'react-toastify';
 import { getAuth, updatePassword } from 'firebase/auth';
 import { LoadingOutlined } from '@ant-design/icons';

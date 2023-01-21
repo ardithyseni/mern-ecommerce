@@ -59,7 +59,7 @@ const App = () => {
     })
     // clean up
     return () => unsubscribe();
-  }, []);
+  }, [auth, dispatch]);
 
   return (
     <>

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../../firebase";
-import { getAuth, GoogleAuthProvider, sendSignInLinkToEmail, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { toast } from 'react-toastify';
 import { Button } from 'antd';
 import { MailOutlined, LoadingOutlined, GoogleOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { createOrUpdateUser } from "../../functions/authFunctions";
 
 
@@ -19,7 +18,7 @@ const Login = ({ history }) => {
 
   useEffect(() => {
     if (user && user.token) history.push('/');
-  }, [user]);
+  }, [user, history]);
 
 
   const roleBasedRedirect = (res) => {

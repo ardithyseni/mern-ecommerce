@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../../firebase";
-import { getAuth, sendSignInLinkToEmail, createUserWithEmailAndPassword } from "firebase/auth";
-import { toast } from 'react-toastify';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+// import { toast } from 'react-toastify';
 import { Button } from 'antd';
 import { useDispatch, useSelector } from "react-redux";
 import { createOrUpdateUser } from "../../functions/authFunctions";
@@ -17,7 +17,7 @@ const Register = ({ history }) => {
 
   useEffect(() => {
     if (user && user.token) history.push('/');
-  }, [user]);
+  }, [user, history]);
 
 
   const auth = getAuth();
