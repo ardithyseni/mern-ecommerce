@@ -9,7 +9,7 @@ export const authCheck = async (req, res, next) => {
     try {
         // const firebaseUser = await admin.auth()
         //     .verifyIdToken(req.headers.idToken,); // match from Login.js frontend
-        const firebaseUser = await admin.auth().verifyIdToken(req.body.idToken, true)
+        const firebaseUser = await admin.auth().verifyIdToken(req.headers.idtoken, true)
         console.log('Firebase user in authcheck: \n', firebaseUser);
         req.user = firebaseUser;
         next();

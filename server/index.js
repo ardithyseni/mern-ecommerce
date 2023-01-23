@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 // import routes
 // const authRoutes = require("./routes/auth");
 import authRoutes from './routes/auth.js';
+import categoryRoutes from './routes/category.js';
 
 // initialize app
 const app = express();
@@ -31,7 +32,8 @@ app.use(cors());
 
 // routes in routes folder
 app.use('/api', authRoutes) // api prefix
-// app.use('/api', authRoutes) // api prefix
+app.use('/api', categoryRoutes) // api prefix
+
 
 // readdirSync("./routes").map((r) => app.use("/api", import from "./routes/" + r);
 
