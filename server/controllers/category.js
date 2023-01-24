@@ -21,11 +21,8 @@ export const listCategories = async (req, res) => {
 }
 
 export const readCategory = async (req, res) => {
-    try {
-        //
-    } catch (error) {
-
-    }
+    let category = await Category.findOne({ slug: req.params.slug }).exec();
+    res.json(category);
 }
 
 
