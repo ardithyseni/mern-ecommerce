@@ -28,7 +28,7 @@ export const readCategory = async (req, res) => {
 
 export const removeCategory = async (req, res) => {
     try {
-        const deletedCategory = await Category.findOneAndDelete({ slug: req.params.slug});
+        const deletedCategory = await Category.findOneAndDelete({ slug: req.params.slug });
         res.json({
             message: "You just deleted",
             deletedCategory
@@ -41,10 +41,23 @@ export const removeCategory = async (req, res) => {
 }
 
 export const updateCategory = async (req, res) => {
+    const { name } = req.body;
     try {
-        //
+        // https://www.mongodb.com/docs/manual/reference/method/db.collection.findOneAndUpdate/#examples
+        const updatedCategory = await Category.findOneAndUpdate(
+            {
+                slug: req.params.slug
+            },
+            {
+                name: name, 
+                slug: slugify(name)
+            }, 
+            {
+                new: true 
+            })
     } catch (error) {
-
+        res.status(400).send('Update category failed');
+        console.log(error);
     }
 }
 
