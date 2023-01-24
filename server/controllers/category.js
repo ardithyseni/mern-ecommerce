@@ -11,13 +11,13 @@ export const createCategory = async (req, res) => {
 
         res.json(category);
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(400).send('Create category failed')
     }
 }
 
 export const listCategories = async (req, res) => {
-    res.json(await Category.find({}).sort({ createdAt: -1 }).exec())
+    res.json(await Category.find({}).sort({ createdAt: -1 }).exec());
 }
 
 export const readCategory = async (req, res) => {
