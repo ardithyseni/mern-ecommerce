@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AdminNav from '../../../components/nav/AdminNav'
 import { toast } from 'react-toastify'
-import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import {
     createCategory,
@@ -96,20 +95,15 @@ const CategoryCreate = () => {
     const [columns, setColumns] = useState([
         {
             title: "Name",
-            dataIndex: "name",
-            width: "80%"
+            dataIndex: "name"
         },
         {
             title: 'Action',
             key: 'action',
-            render: (_, c) => (
+            render: (_, record) => (
                 <Space size="middle">
-                    <Link to={`/admin/category/${c.slug}`}>
-                        <EditOutlined style={{ fontSize: '20px' }} />
-                    </Link>
-                    <span onClick={() => handleRemoveCategory(c.slug)} className='btn btn-sm'>
-                        <DeleteOutlined style={{ fontSize: '20px' }} className='text-danger' />
-                    </span>
+                    <EditOutlined style={{ fontSize: '20px' }} />
+                    <DeleteOutlined style={{ fontSize: '20px' }} className='text-danger' />
                 </Space>
             ),
         }
@@ -132,11 +126,12 @@ const CategoryCreate = () => {
         setLoading(true);
         createCategory({ name }, user.token)
             .then(res => {
-                // console.log(res)
+
+                console.log(res)
                 setLoading(false)
                 setName('')
                 toast.success(`Category: ${res.data.name} created!`)
-                loadCategories();
+
             }).catch(err => {
 
                 console.log(err);
@@ -146,22 +141,9 @@ const CategoryCreate = () => {
             })
     }
 
-    const handleRemoveCategory = async (slug) => {
-        if(window.confirm("Delete Category?")) {
-            setLoading(true);
-            removeCategory(slug, user.token)
-            .then((res) => {
-                setLoading(false);
-                toast.error(`${res.data.name} category deleted`);
-                loadCategories(); 
-            })
-            .catch(err => {
-                if (err.response.status === 400) {
-                    setLoading(false);
-                    toast.error(err.response.data);
-                }
-            })
-        }
+    const errorSubmit = (e) => {
+        e.preventDefault();
+        toast.error("Create category failed")
     }
 
     const categoryForm = () => (
@@ -211,20 +193,7 @@ const CategoryCreate = () => {
                     </div>
                     <hr />
                     {categories.map((c) => (
-                        <div className="alert alert-secondary" key={c._id}>
-                            {c.name}
-                            <span
-                                // onClick={() => handleRemove(c.slug)}
-                                className="btn btn-sm float-right"
-                            >
-                                <DeleteOutlined style={{ fontSize: '20px' }} className="text-danger" />
-                            </span>
-                            <Link to={`/admin/category/${c.slug}`}>
-                                <span className="btn btn-sm float-right">
-                                    <EditOutlined style={{ fontSize: '20px' }} />
-                                </span>
-                            </Link>
-                        </div>
+                        <div key={c._id}>{c.name}</div>
                     ))}
                     <Table columns={columns} dataSource={categories} />
                 </div>
