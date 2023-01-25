@@ -54,7 +54,8 @@ export const updateCategory = async (req, res) => {
             }, 
             {
                 new: true 
-            })
+            });
+            res.json(updatedCategory)
     } catch (error) {
         res.status(400).send('Update category failed');
         console.log(error);

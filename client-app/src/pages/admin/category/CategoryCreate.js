@@ -151,10 +151,10 @@ const CategoryCreate = () => {
                         <tbody>
                             {categories.map((c) => (
                                 <tr key={c._id}>
-                                    <td scope='row'>{c.name}</td>
+                                    <td>{c.name}</td>
 
 
-                                    <td scope='row'>
+                                    <td>
 
                                         <span key="delete"
                                             onClick={() => handleRemoveCategory(c.slug)}
