@@ -12,80 +12,6 @@ import { Button, Space, Table, Tag } from 'antd';
 import { CheckOutlined, DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons'
 
 
-// const columns = [
-//     {
-//       title: 'Name',
-//       dataIndex: 'name',
-//       key: 'name',
-//       render: (text) => <a>{text}</a>,
-//     },
-//     {
-//       title: 'Age',
-//       dataIndex: 'age',
-//       key: 'age',
-//     },
-//     {
-//       title: 'Address',
-//       dataIndex: 'address',
-//       key: 'address',
-//     },
-//     {
-//       title: 'Tags',
-//       key: 'tags',
-//       dataIndex: 'tags',
-//       render: (_, { tags }) => (
-//         <>
-//           {tags.map((tag) => {
-//             let color = tag.length > 5 ? 'geekblue' : 'green';
-//             if (tag === 'loser') {
-//               color = 'volcano';
-//             }
-//             return (
-//               <Tag color={color} key={tag}>
-//                 {tag.toUpperCase()}
-//               </Tag>
-//             );
-//           })}
-//         </>
-//       ),
-//     },
-//     {
-//       title: 'Action',
-//       key: 'action',
-//       render: (_, record) => (
-//         <Space size="middle">
-//           <a>Invite {record.name}</a>
-//           <a>Delete</a>
-//         </Space>
-//       ),
-//     },
-//   ];
-//   const data = [
-//     {
-//       key: '1',
-//       name: {c.name},
-//       age: 32,
-//       address: 'New York No. 1 Lake Park',
-//       tags: ['nice', 'developer'],
-//     },
-//     {
-//       key: '2',
-//       name: 'Jim Green',
-//       age: 42,
-//       address: 'London No. 1 Lake Park',
-//       tags: ['loser'],
-//     },
-//     {
-//       key: '3',
-//       name: 'Joe Black',
-//       age: 32,
-//       address: 'Sidney No. 1 Lake Park',
-//       tags: ['cool', 'teacher'],
-//     },
-//   ];
-
-
-
 const CategoryCreate = () => {
 
     const { user } = useSelector(state => ({ ...state }))
@@ -97,6 +23,7 @@ const CategoryCreate = () => {
         {
             title: "Name",
             dataIndex: "name",
+            key: 'name',
             width: "80%"
         },
         {
@@ -125,7 +52,10 @@ const CategoryCreate = () => {
         loadCategories();
     }, [])
 
-    const loadCategories = () => getCategories().then((c) => setCategories(c.data));
+    const loadCategories = () => getCategories().then((c) => {
+        setCategories(c.data)
+        console.log(c.data);
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -147,20 +77,21 @@ const CategoryCreate = () => {
     }
 
     const handleRemoveCategory = async (slug) => {
-        if(window.confirm("Delete Category?")) {
+        if (window.confirm("Delete Category?")) {
             setLoading(true);
             removeCategory(slug, user.token)
-            .then((res) => {
-                setLoading(false);
-                toast.error(`${res.data.name} category deleted`);
-                loadCategories(); 
-            })
-            .catch(err => {
-                if (err.response.status === 400) {
+                .then((res) => {
                     setLoading(false);
-                    toast.error(err.response.data);
-                }
-            })
+                    console.log("REMOVE CATEGORY THEN", res.data.deletedCategory.name)
+                    toast.error(`${res.data.deletedCategory.name} category deleted`);
+                    loadCategories();
+                })
+                .catch(err => {
+                    if (err.response.status === 400) {
+                        setLoading(false);
+                        toast.error(err.response.data);
+                    }
+                })
         }
     }
 
@@ -210,23 +141,38 @@ const CategoryCreate = () => {
                         </div>
                     </div>
                     <hr />
-                    {categories.map((c) => (
-                        <div className="alert alert-secondary" key={c._id}>
-                            {c.name}
-                            <span
-                                // onClick={() => handleRemove(c.slug)}
-                                className="btn btn-sm float-right"
-                            >
-                                <DeleteOutlined style={{ fontSize: '20px' }} className="text-danger" />
-                            </span>
-                            <Link to={`/admin/category/${c.slug}`}>
-                                <span className="btn btn-sm float-right">
-                                    <EditOutlined style={{ fontSize: '20px' }} />
-                                </span>
-                            </Link>
-                        </div>
-                    ))}
-                    <Table columns={columns} dataSource={categories} />
+                    <table className='table table-hover w-auto mt-1'>
+                        <thead className="thead-light">
+                            <tr>
+                                <th scope='col'>Name</th>
+                                <th scope='col'><span className='float-right'>Action</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {categories.map((c) => (
+                                <tr key={c._id}>
+                                    <td scope='row'>{c.name}</td>
+
+
+                                    <td scope='row'>
+
+                                        <span key="delete"
+                                            onClick={() => handleRemoveCategory(c.slug)}
+                                            className="btn btn-sm float-right"
+                                        >
+                                            <DeleteOutlined style={{ fontSize: '20px' }} className="text-danger" />
+                                        </span>
+                                        <Link to={`/admin/category/${c.slug}`}>
+                                            <span key="edit" className="btn btn-sm float-right">
+                                                <EditOutlined style={{ fontSize: '20px' }} />
+                                            </span>
+                                        </Link></td>
+
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {/* <Table columns={columns} dataSource={categories} /> */}
                 </div>
             </div>
         </div>
