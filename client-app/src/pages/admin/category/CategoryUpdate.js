@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { updateCategory, getCategory } from '../../../functions/category'
 import { Button } from 'antd';
 import { CheckOutlined, LoadingOutlined } from '@ant-design/icons'
+import CategoryForm from '../../../components/forms/CategoryForm'
 
 
 const CategoryUpdate = ({ history, match }) => {
@@ -42,37 +43,37 @@ const CategoryUpdate = ({ history, match }) => {
     };
 
 
-    const categoryForm = () => (
+    // const categoryForm = () => (
 
-        <form onSubmit={handleSubmit}>
+    //     <form onSubmit={handleSubmit}>
 
-            <div className="form-group">
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="New category name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    autoFocus
-                    required
-                />
-            </div>
+    //         <div className="form-group">
+    //             <input
+    //                 type="text"
+    //                 className="form-control"
+    //                 placeholder="New category name"
+    //                 value={name}
+    //                 onChange={(e) => setName(e.target.value)}
+    //                 autoFocus
+    //                 required
+    //             />
+    //         </div>
 
-            <br />
-            <Button
-                onClick={handleSubmit}
-                type="primary"
-                block
-                size="large"
-                shape="round"
-                icon={loading ? <LoadingOutlined /> : <CheckOutlined />}
-                className="mb-2"
-                disabled={name.length < 2}
-            >
-                Update name
-            </Button>
-        </form>
-    )
+    //         <br />
+    //         <Button
+    //             onClick={handleSubmit}
+    //             type="primary"
+    //             block
+    //             size="large"
+    //             shape="round"
+    //             icon={loading ? <LoadingOutlined /> : <CheckOutlined />}
+    //             className="mb-2"
+    //             disabled={name.length < 2}
+    //         >
+    //             Update name
+    //         </Button>
+    //     </form>
+    // )
 
     return (
         <div className="container-fluid">
@@ -84,7 +85,13 @@ const CategoryUpdate = ({ history, match }) => {
                     <div className="row">
                         <div className="col-md-6 offset-md-3">
                             <h4>Update Category</h4>
-                            {categoryForm()}
+                            {/* {categoryForm()} */}
+                            <CategoryForm  
+                            handleSubmit={handleSubmit}
+                            name={name}
+                            setName={setName}
+                            buttonName="Update"    
+                            />
                         </div>
                     </div>
                     <hr />

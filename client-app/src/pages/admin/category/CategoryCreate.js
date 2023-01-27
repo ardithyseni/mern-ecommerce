@@ -10,7 +10,7 @@ import {
 } from '../../../functions/category'
 import { Button, Space, Table, Tag } from 'antd';
 import { CheckOutlined, DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons'
-
+import CategoryForm from '../../../components/forms/CategoryForm'
 
 const CategoryCreate = () => {
 
@@ -137,7 +137,13 @@ const CategoryCreate = () => {
                     <div className="row">
                         <div className="col-md-6 offset-md-3">
                             <h4>Create category</h4>
-                            {categoryForm()}
+                            {/* {categoryForm()} */}
+                            <CategoryForm  
+                            handleSubmit={handleSubmit}
+                            name={name}
+                            setName={setName}
+                            buttonName="Create"    
+                            />
                         </div>
                     </div>
                     <hr />

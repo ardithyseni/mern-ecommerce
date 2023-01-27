@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// eslint-disable-next-line
 import { auth } from "../../firebase";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 // import { toast } from 'react-toastify';
