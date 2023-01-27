@@ -4,26 +4,30 @@ import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import {
-    createCategory,
-    getCategories,
-    removeCategory
-} from '../../../functions/category'
-import { Button, Input } from 'antd';
+    createSubcategory,
+    getSubcategories,
+    removeSubcategory
+} from '../../../functions/subcategory'
+import { getCategories } from '../../../functions/category'
 import { CheckOutlined, DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons'
 import CategoryForm from '../../../components/forms/CategoryForm'
 import SearchInput from '../../../components/forms/SearchInput'
 
-const CategoryCreate = () => {
+const CreateSubCategory = () => {
 
     const { user } = useSelector(state => ({ ...state }))
 
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
+    const [parentCategory, setParentCategory] = useState("");
     // search & filter step 1
     const [keyword, setKeyword] = useState("");
 
+
     useEffect(() => {
+        loadSubcategories();
         loadCategories();
     }, [])
 
@@ -31,17 +35,22 @@ const CategoryCreate = () => {
         setCategories(c.data)
         console.log(c.data);
     });
+    
+    const loadSubcategories = () => getSubcategories().then((s) => {
+        setSubcategories(s.data)
+        console.log(s.data);
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        createCategory({ name }, user.token)
+        createSubcategory({ name, parent: parentCategory }, user.token)
             .then(res => {
                 // console.log(res)
                 setLoading(false)
                 setName('')
-                toast.success(`Category: ${res.data.name} created!`)
-                loadCategories();
+                toast.success(`Subcategory: ${res.data.name} created!`)
+                loadSubcategories();
             }).catch(err => {
 
                 console.log(err);
@@ -54,7 +63,7 @@ const CategoryCreate = () => {
     const handleRemoveCategory = async (slug) => {
         if (window.confirm("Delete Category?")) {
             setLoading(true);
-            removeCategory(slug, user.token)
+            removeSubcategory(slug, user.token)
                 .then((res) => {
                     setLoading(false);
                     console.log("REMOVE CATEGORY THEN", res.data.deletedCategory.name)
@@ -70,7 +79,7 @@ const CategoryCreate = () => {
         }
     }
 
-    
+
     const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword)
 
     // const categoryForm = () => (
@@ -114,20 +123,31 @@ const CategoryCreate = () => {
                 <div className="container p-5">
                     <div className="row">
                         <div className="col-md-6 offset-md-3">
-                            <h4>Create category</h4>
+                            <h4>Create Subcategory</h4>
+
+                            <div className='form-group'>
+                                <label>Select Parent Category</label>
+                                <select className="custom-select" onChange={(e) => setParentCategory(e.target.value)}>
+                                    <option>Select</option>
+                                    {categories.length > 0 && categories.map((c) => (
+                                        <option key={c._id} value={c._id}>{c.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                                        {JSON.stringify(parentCategory)}
                             {/* {categoryForm()} */}
-                            <CategoryForm  
-                            handleSubmit={handleSubmit}
-                            name={name}
-                            setName={setName}
-                            buttonName="Create"    
+                            <CategoryForm
+                                handleSubmit={handleSubmit}
+                                name={name}
+                                setName={setName}
+                                buttonName="Create"
                             />
                         </div>
                     </div>
 
                     <hr />
 
-                    <SearchInput keyword={keyword} setKeyword={setKeyword}/>
+                    <SearchInput keyword={keyword} setKeyword={setKeyword} />
 
                     <table className='table table-hover w-auto mt-1'>
                         <thead className="thead-light">
@@ -137,20 +157,20 @@ const CategoryCreate = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {categories.filter(searched(keyword)).map((c) => (
-                                <tr key={c._id}>
-                                    <td>{c.name}</td>
+                            {subcategories.filter(searched(keyword)).map((s) => (
+                                <tr key={s._id}>
+                                    <td>{s.name}</td>
 
 
                                     <td>
 
                                         <span key="delete"
-                                            onClick={() => handleRemoveCategory(c.slug)}
+                                            onClick={() => handleRemoveCategory(s.slug)}
                                             className="btn btn-sm float-right"
                                         >
                                             <DeleteOutlined style={{ fontSize: '20px' }} className="text-danger" />
                                         </span>
-                                        <Link to={`/admin/category/${c.slug}`}>
+                                        <Link to={`/admin/subcategory/${s.slug}`}>
                                             <span key="edit" className="btn btn-sm float-right">
                                                 <EditOutlined style={{ fontSize: '20px' }} />
                                             </span>
@@ -168,4 +188,4 @@ const CategoryCreate = () => {
     )
 }
 
-export default CategoryCreate
+export default CreateSubCategory
