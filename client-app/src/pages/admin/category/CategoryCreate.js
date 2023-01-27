@@ -11,6 +11,7 @@ import {
 import { Button, Input } from 'antd';
 import { CheckOutlined, DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons'
 import CategoryForm from '../../../components/forms/CategoryForm'
+import SearchInput from '../../../components/forms/SearchInput'
 
 const CategoryCreate = () => {
 
@@ -69,11 +70,7 @@ const CategoryCreate = () => {
         }
     }
 
-    const handleSearchInput = (e) => {
-        e.preventDefault();
-        setKeyword(e.target.value.toLowerCase());
-    }
-
+    
     const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword)
 
     // const categoryForm = () => (
@@ -128,10 +125,10 @@ const CategoryCreate = () => {
                         </div>
                     </div>
 
-
                     <hr />
-                    <Search value={keyword} onChange={handleSearchInput} placeholder="Search Category" enterButton="Search" size="large" style={{ margin: "10px 0px 10px 0px" }} />
-                    
+
+                    <SearchInput keyword={keyword} setKeyword={setKeyword}/>
+
                     <table className='table table-hover w-auto mt-1'>
                         <thead className="thead-light">
                             <tr>
