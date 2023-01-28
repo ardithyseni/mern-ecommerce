@@ -42,15 +42,16 @@ export const removeSubcategory = async (req, res) => {
 }
 
 export const updateSubcategory = async (req, res) => {
-    const { name } = req.body;
     try {
+        const { name, parent } = req.body;
         // https://www.mongodb.com/docs/manual/reference/method/db.collection.findOneAndUpdate/#examples
         const updatedSubcategory = await Subcategory.findOneAndUpdate(
             {
                 slug: req.params.slug
             },
             {
-                name: name, 
+                name: name,
+                parent: parent, 
                 slug: slugify(name)
             }, 
             {

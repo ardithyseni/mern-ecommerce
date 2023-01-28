@@ -60,15 +60,15 @@ const CreateSubCategory = () => {
             })
     }
 
-    const handleRemoveCategory = async (slug) => {
-        if (window.confirm("Delete Category?")) {
+    const handleRemoveSubcategory = async (slug) => {
+        if (window.confirm("Delete Subcategory?")) {
             setLoading(true);
             removeSubcategory(slug, user.token)
                 .then((res) => {
                     setLoading(false);
                     console.log("REMOVE CATEGORY THEN", res.data.deletedCategory.name)
                     toast.error(`${res.data.deletedCategory.name} category deleted`);
-                    loadCategories();
+                    loadSubcategories();
                 })
                 .catch(err => {
                     if (err.response.status === 400) {
@@ -127,8 +127,8 @@ const CreateSubCategory = () => {
 
                             <div className='form-group'>
                                 <label>Select Parent Category</label>
-                                <select className="custom-select" onChange={(e) => setParentCategory(e.target.value)}>
-                                    <option>Select</option>
+                                <select className="custom-select" required={true} onChange={(e) => setParentCategory(e.target.value)}>
+                                    <option value="" disabled selected>Select</option>
                                     {categories.length > 0 && categories.map((c) => (
                                         <option key={c._id} value={c._id}>{c.name}</option>
                                     ))}
@@ -165,7 +165,7 @@ const CreateSubCategory = () => {
                                     <td>
 
                                         <span key="delete"
-                                            onClick={() => handleRemoveCategory(s.slug)}
+                                            onClick={() => handleRemoveSubcategory(s.slug)}
                                             className="btn btn-sm float-right"
                                         >
                                             <DeleteOutlined style={{ fontSize: '20px' }} className="text-danger" />
