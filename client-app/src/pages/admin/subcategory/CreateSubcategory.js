@@ -9,7 +9,7 @@ import {
     removeSubcategory
 } from '../../../functions/subcategory'
 import { getCategories } from '../../../functions/category'
-import { CheckOutlined, DeleteOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import CategoryForm from '../../../components/forms/CategoryForm'
 import SearchInput from '../../../components/forms/SearchInput'
 
@@ -35,7 +35,7 @@ const CreateSubCategory = () => {
         setCategories(c.data)
         console.log(c.data);
     });
-    
+
     const loadSubcategories = () => getSubcategories().then((s) => {
         setSubcategories(s.data)
         console.log(s.data);
@@ -134,7 +134,7 @@ const CreateSubCategory = () => {
                                     ))}
                                 </select>
                             </div>
-                                        {JSON.stringify(parentCategory)}
+                            {JSON.stringify(parentCategory)}
                             {/* {categoryForm()} */}
                             <CategoryForm
                                 handleSubmit={handleSubmit}
@@ -153,6 +153,7 @@ const CreateSubCategory = () => {
                         <thead className="thead-light">
                             <tr>
                                 <th scope='col'>Name</th>
+                                <th scope='col'>Parent</th>
                                 <th scope='col'><span className='float-right'>Action</span></th>
                             </tr>
                         </thead>
@@ -160,8 +161,7 @@ const CreateSubCategory = () => {
                             {subcategories.filter(searched(keyword)).map((s) => (
                                 <tr key={s._id}>
                                     <td>{s.name}</td>
-
-
+                                    <td>{s.parent.name}</td>
                                     <td>
 
                                         <span key="delete"
@@ -174,7 +174,8 @@ const CreateSubCategory = () => {
                                             <span key="edit" className="btn btn-sm float-right">
                                                 <EditOutlined style={{ fontSize: '20px' }} />
                                             </span>
-                                        </Link></td>
+                                        </Link>
+                                    </td>
 
                                 </tr>
                             ))}

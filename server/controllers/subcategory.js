@@ -18,7 +18,7 @@ export const createSubcategory = async (req, res) => {
 }
 
 export const listSubcategories = async (req, res) => {
-    res.json(await Subcategory.find({}).sort({ createdAt: -1 }).exec());
+    res.json(await Subcategory.find({}).populate('parent').sort({ createdAt: -1 }).exec());
 }
 
 export const readSubcategory = async (req, res) => {
