@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import categoryRoutes from './routes/category.js';
 import subcategoryRoutes from './routes/subcategory.js';
+import productRoutes from './routes/product.js';
 
 
 // initialize app
@@ -35,6 +36,7 @@ app.use(cors());
 app.use('/api', authRoutes) // api prefix
 app.use('/api', categoryRoutes) // api prefix
 app.use('/api', subcategoryRoutes) // api prefix
+app.use('/api', productRoutes) // api prefix
 
 
 // readdirSync("./routes").map((r) => app.use("/api", import from "./routes/" + r);
