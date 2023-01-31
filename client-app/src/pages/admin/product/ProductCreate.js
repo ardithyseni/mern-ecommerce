@@ -24,10 +24,18 @@ const initialState = {
 
 const ProductCreate = () => {
     const [values, setValues] = useState(initialState);
-    const [loading, setLoading] = useState(false);
+
+    // redux
+    const { user } = useSelector((state) => ({ ...state }));
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        //
+        createProduct(values, user.token)
+        .then((res) => {
+            console.log(res)
+            toast.success(`${res.data.title} successfully created`);
+
+        })
     };
 
     const handleChange = (e) => {
@@ -37,23 +45,6 @@ const ProductCreate = () => {
 
     // const isFormValid = Object.values(values).every(val => val !== "");
 
-    
-const isFormValid = (values) => {
-  for (const key in values) {
-    if (!values[key]) return false;
-  }
-  return true;
-};
-
-    function isObjectEmpty(obj) {
-      for (const value of Object.values(obj)) {
-        if (value !== '') {
-          return false;
-        }
-      }
-      return true;
-    }
-    
 
     return (
         <div className="container-fluid">
@@ -79,8 +70,7 @@ const isFormValid = (values) => {
 
                         <div className="form-group">
                             <label>Description</label>
-                            <input
-                                type="text"
+                            <textarea
                                 name="description"
                                 className="form-control"
                                 required
@@ -93,6 +83,7 @@ const isFormValid = (values) => {
                             <label>Price</label>
                             <input
                                 type="number"
+                                step="any"
                                 name="price"
                                 className="form-control"
                                 required
@@ -120,6 +111,7 @@ const isFormValid = (values) => {
                                 type="number"
                                 min="0.1"
                                 max="5999"
+                                step="any"
                                 name="quantity"
                                 className="form-control"
                                 required
