@@ -22,7 +22,7 @@ const initialState = {
 };
 
 
-const ProductCreate = () => {
+const ProductCreate = ({history}) => {
     const [values, setValues] = useState(initialState);
 
     // redux
@@ -34,7 +34,10 @@ const ProductCreate = () => {
         .then((res) => {
             console.log(res)
             toast.success(`${res.data.title} successfully created`);
-
+            history.push('/admin/dashboard')
+        }).catch((error) => {
+            console.log(error)
+            toast.error(error.response.data.err);
         })
     };
 
