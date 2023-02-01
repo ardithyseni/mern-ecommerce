@@ -1,6 +1,21 @@
-import React from 'react'
+import React from "react";
 
-const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
+const ProductCreateForm = ({ handleSubmit, handleChange, values }) => {
+    // destructure
+    const {
+        title,
+        description,
+        price,
+        categories,
+        category,
+        subcategories,
+        quantity,
+        images,
+        shipping,
+        color,
+        brand,
+    } = values;
+
     return (
         <form onSubmit={handleSubmit}>
             <div className="form-group">
@@ -10,7 +25,7 @@ const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
                     name="title"
                     className="form-control"
                     required
-                    value={values.title}
+                    value={title}
                     onChange={handleChange}
                 />
             </div>
@@ -21,7 +36,7 @@ const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
                     name="description"
                     className="form-control"
                     required
-                    value={values.description}
+                    value={description}
                     onChange={handleChange}
                 />
             </div>
@@ -34,7 +49,7 @@ const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
                     name="price"
                     className="form-control"
                     required
-                    value={values.price}
+                    value={price}
                     onChange={handleChange}
                 />
             </div>
@@ -46,7 +61,11 @@ const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
                     className="custom-select"
                     required
                     onChange={handleChange}
+                    defaultValue="Select"
                 >
+                    <option value="Select" disabled>
+                        Select
+                    </option>
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
                 </select>
@@ -62,7 +81,7 @@ const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
                     name="quantity"
                     className="form-control"
                     required
-                    value={values.quantity}
+                    value={quantity}
                     onChange={handleChange}
                 />
             </div>
@@ -74,7 +93,7 @@ const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
                     name="color"
                     className="form-control"
                     required
-                    value={values.color}
+                    value={color}
                     onChange={handleChange}
                 />
             </div>
@@ -86,9 +105,29 @@ const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
                     name="brand"
                     className="form-control"
                     required
-                    value={values.brand}
+                    value={brand}
                     onChange={handleChange}
                 />
+            </div>
+            <div className="form-group">
+                <label>Select Category</label>
+                <select
+                    className="custom-select"
+                    name="category"
+                    required={true}
+                    onChange={handleChange}
+                    defaultValue="Select"
+                >
+                    <option value="Select" disabled>
+                        Select
+                    </option>
+                    {categories.length > 0 &&
+                        categories.map((c) => (
+                            <option key={c._id} value={c._id}>
+                                {c.name}
+                            </option>
+                        ))}
+                </select>
             </div>
             {/* <Button
                             onClick={handleSubmit}
@@ -108,9 +147,11 @@ const ProductCreateForm = ({handleSubmit, handleChange, values}) => {
                         >
                             Create
                         </Button> */}
-            <button type="submit" className="btn btn-primary">Create Product</button>
+            <button type="submit" className="btn btn-primary">
+                Create Product
+            </button>
         </form>
-    )
-}
+    );
+};
 
-export default ProductCreateForm
+export default ProductCreateForm;

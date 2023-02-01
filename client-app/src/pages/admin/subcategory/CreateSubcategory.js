@@ -127,14 +127,14 @@ const CreateSubCategory = () => {
 
                             <div className='form-group'>
                                 <label>Select Parent Category</label>
-                                <select className="custom-select" required={true} onChange={(e) => setParentCategory(e.target.value)}>
-                                    <option value="" disabled selected>Select</option>
+                                <select className="custom-select" defaultValue={'Select'} required={true} onChange={(e) => setParentCategory(e.target.value)}>
+                                    <option value="Select" disabled>Select</option>
                                     {categories.length > 0 && categories.map((c) => (
                                         <option key={c._id} value={c._id}>{c.name}</option>
                                     ))}
                                 </select>
                             </div>
-                            {JSON.stringify(parentCategory)}
+                            {/* {JSON.stringify(parentCategory)} */}
                             {/* {categoryForm()} */}
                             <CategoryForm
                                 handleSubmit={handleSubmit}

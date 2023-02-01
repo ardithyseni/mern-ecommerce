@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { createProduct } from "../../../functions/product";
+import { getCategories } from "../../../functions/category";
 import { Button } from "antd";
 import { LoadingOutlined, CheckOutlined } from "@ant-design/icons";
 import ProductCreateForm from "../../../components/forms/ProductCreateForm";
@@ -27,6 +28,14 @@ const ProductCreate = ({ history }) => {
 
     // redux
     const { user } = useSelector((state) => ({ ...state }));
+
+    useEffect(() => {
+        loadCategories();
+    }, [])
+
+    const loadCategories = () => getCategories().then((c) => {
+        setValues({ ...values, categories: c.data });
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
