@@ -1,9 +1,9 @@
 import Product from "../models/product.js";
 import slugify from "slugify";
 
-export const createProduct = async(req, res) => {
+export const createProduct = async (req, res) => {
     try {
-        
+
         console.log(req.body);
         req.body.slug = slugify(req.body.title);
         const newProduct = new Product(req.body).save()
@@ -15,4 +15,9 @@ export const createProduct = async(req, res) => {
             err: err.message,
         })
     }
+}
+
+export const listProducts = async (req, res) => {
+    let products = await Product.find({});
+    res.json(products);
 }
