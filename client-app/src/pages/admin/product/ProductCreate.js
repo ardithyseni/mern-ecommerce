@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { createProduct } from "../../../functions/product";
 import { Button } from "antd";
 import { LoadingOutlined, CheckOutlined } from "@ant-design/icons";
+import ProductCreateForm from "../../../components/forms/ProductCreateForm";
 
 const initialState = {
     title: "",
@@ -21,8 +22,7 @@ const initialState = {
     brand: "",
 };
 
-
-const ProductCreate = ({history}) => {
+const ProductCreate = ({ history }) => {
     const [values, setValues] = useState(initialState);
 
     // redux
@@ -31,14 +31,15 @@ const ProductCreate = ({history}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         createProduct(values, user.token)
-        .then((res) => {
-            console.log(res)
-            toast.success(`${res.data.title} successfully created`);
-            history.push('/admin/dashboard')
-        }).catch((error) => {
-            console.log(error)
-            toast.error(error.response.data.err);
-        })
+            .then((res) => {
+                console.log(res);
+                toast.success(`${values.title} successfully created`);
+                history.push("/admin/dashboard");
+            })
+            .catch((error) => {
+                console.log(error);
+                toast.error(error.response.data.err);
+            });
     };
 
     const handleChange = (e) => {
@@ -47,7 +48,6 @@ const ProductCreate = ({history}) => {
     };
 
     // const isFormValid = Object.values(values).every(val => val !== "");
-
 
     return (
         <div className="container-fluid">
@@ -58,114 +58,11 @@ const ProductCreate = ({history}) => {
                 <div className="col-md-7">
                     <h4>Create a product</h4>
                     <hr />
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>Title</label>
-                            <input
-                                type="text"
-                                name="title"
-                                className="form-control"
-                                required
-                                value={values.title}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Description</label>
-                            <textarea
-                                name="description"
-                                className="form-control"
-                                required
-                                value={values.description}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Price</label>
-                            <input
-                                type="number"
-                                step="any"
-                                name="price"
-                                className="form-control"
-                                required
-                                value={values.price}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Shipping</label>
-                            <select
-                                name="shipping"
-                                className="custom-select"
-                                required
-                                onChange={handleChange}
-                            >
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                            </select>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Quantity</label>
-                            <input
-                                type="number"
-                                min="0.1"
-                                max="5999"
-                                step="any"
-                                name="quantity"
-                                className="form-control"
-                                required
-                                value={values.quantity}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Color</label>
-                            <input
-                                type="text"
-                                name="color"
-                                className="form-control"
-                                required
-                                value={values.color}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Brand</label>
-                            <input
-                                type="text"
-                                name="brand"
-                                className="form-control"
-                                required
-                                value={values.brand}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        {/* <Button
-                            onClick={handleSubmit}
-                            type="primary"
-                            block
-                            size="large"
-                            shape="round"
-                            // disabled={}
-                            icon={
-                                loading ? (
-                                    <LoadingOutlined />
-                                ) : (
-                                    <CheckOutlined />
-                                )
-                            }
-                            className="mb-2"
-                        >
-                            Create
-                        </Button> */}
-                        <button type="submit" className="btn btn-primary">Create Product</button>
-                    </form>
+                    <ProductCreateForm
+                        handleSubmit={handleSubmit}
+                        handleChange={handleChange}
+                        values={values}
+                    />
                 </div>
             </div>
         </div>
