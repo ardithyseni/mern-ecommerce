@@ -59,12 +59,13 @@ const ProductCreate = ({ history }) => {
     const handleCategoryChange = (e) => {
         e.preventDefault();
         console.log('clicked category', e.target.value);
-        setValues({ ...values, category: e.target.value });
+        setValues({ ...values, subcategories: [], category: e.target.value });
         getCategorySubs(e.target.value)
         .then((res) => {
             console.log('getcategorysubs', res);
             setSubcategoryOptions(res.data);
-        })
+        });
+        setShowSubcategories(true);
     }
 
     // const isFormValid = Object.values(values).every(val => val !== "");
