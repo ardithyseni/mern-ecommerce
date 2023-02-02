@@ -1,6 +1,16 @@
 import React from "react";
+import { Select } from "antd";
+const { Option } = Select;
 
-const ProductCreateForm = ({ handleSubmit, handleChange, values }) => {
+const ProductCreateForm = ({
+    handleSubmit,
+    handleChange,
+    handleCategoryChange,
+    values,
+    subcategoryOptions,
+    showSubcategories,
+    setValues,
+}) => {
     // destructure
     const {
         title,
@@ -115,7 +125,7 @@ const ProductCreateForm = ({ handleSubmit, handleChange, values }) => {
                     className="custom-select"
                     name="category"
                     required={true}
-                    onChange={handleChange}
+                    onChange={handleCategoryChange}
                     defaultValue="Select"
                 >
                     <option value="Select" disabled>
@@ -129,6 +139,30 @@ const ProductCreateForm = ({ handleSubmit, handleChange, values }) => {
                         ))}
                 </select>
             </div>
+
+            <div>
+                <label>Sub Categories</label>
+                <Select
+                    mode="multiple"
+                    allowClear
+                    placeholder="Select"
+                    value={subcategories}
+                    style={{
+                        width: "100%",
+                    }}
+                    onChange={(value) =>
+                        setValues({ ...values, subcategories: value })
+                    }
+                >
+                    {subcategoryOptions.length > 0 &&
+                        subcategoryOptions.map((s) => (
+                            <Option key={s._id} value={s._id}>
+                                {s.name}
+                            </Option>
+                        ))}
+                </Select>
+            </div>
+            <br />
             {/* <Button
                             onClick={handleSubmit}
                             type="primary"

@@ -4,9 +4,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { createProduct } from "../../../functions/product";
-import { getCategories } from "../../../functions/category";
-import { Button } from "antd";
-import { LoadingOutlined, CheckOutlined } from "@ant-design/icons";
+import { getCategories, getCategorySubs } from "../../../functions/category";
 import ProductCreateForm from "../../../components/forms/ProductCreateForm";
 
 const initialState = {
@@ -25,7 +23,9 @@ const initialState = {
 
 const ProductCreate = ({ history }) => {
     const [values, setValues] = useState(initialState);
-
+    const [subcategoryOptions, setSubcategoryOptions] = useState([]);
+    const [showSubcategories, setShowSubcategories] = useState(false);
+    
     // redux
     const { user } = useSelector((state) => ({ ...state }));
 
@@ -56,6 +56,17 @@ const ProductCreate = ({ history }) => {
         console.log(e.target.name, "--", e.target.value);
     };
 
+    const handleCategoryChange = (e) => {
+        e.preventDefault();
+        console.log('clicked category', e.target.value);
+        setValues({ ...values, category: e.target.value });
+        getCategorySubs(e.target.value)
+        .then((res) => {
+            console.log('getcategorysubs', res);
+            setSubcategoryOptions(res.data);
+        })
+    }
+
     // const isFormValid = Object.values(values).every(val => val !== "");
 
     return (
@@ -70,7 +81,11 @@ const ProductCreate = ({ history }) => {
                     <ProductCreateForm
                         handleSubmit={handleSubmit}
                         handleChange={handleChange}
+                        setValues={setValues}
                         values={values}
+                        handleCategoryChange={handleCategoryChange}
+                        subcategoryOptions={subcategoryOptions}
+                        showSubcategories={showSubcategories}
                     />
                 </div>
             </div>
