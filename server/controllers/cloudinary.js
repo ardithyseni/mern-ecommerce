@@ -22,7 +22,8 @@ export const uploadImages = async (req, res) => {
 export const removeImage = (req, res) => {
     let image_id = req.body.public_id;
     cloudinary.v2.uploader
-        .destroy(image_id)
-        .then((res) => res.send("ok"))
-        .catch((err) => console.log(err));
-};
+        .destroy(image_id, function(error,result) {
+            console.log(result, error) })
+            .then(res => console.log(res))
+            .catch(_err=> console.log("Something went wrong, please try again later."));
+    }
