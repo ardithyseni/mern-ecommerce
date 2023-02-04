@@ -12,7 +12,7 @@ import authRoutes from './routes/auth.js';
 import categoryRoutes from './routes/category.js';
 import subcategoryRoutes from './routes/subcategory.js';
 import productRoutes from './routes/product.js';
-
+import cloudinaryRoutes from './routes/cloudinary.js';
 
 // initialize app
 const app = express();
@@ -34,9 +34,10 @@ app.use(cors());
 
 // routes in routes folder
 app.use('/api', authRoutes) // api prefix
-app.use('/api', categoryRoutes) // api prefix
-app.use('/api', subcategoryRoutes) // api prefix
-app.use('/api', productRoutes) // api prefix
+app.use('/api', categoryRoutes)
+app.use('/api', subcategoryRoutes)
+app.use('/api', productRoutes)
+app.use('/api', cloudinaryRoutes)
 
 
 // readdirSync("./routes").map((r) => app.use("/api", import from "./routes/" + r);

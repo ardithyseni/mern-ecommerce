@@ -26,17 +26,19 @@ const ProductCreate = ({ history }) => {
     const [values, setValues] = useState(initialState);
     const [subcategoryOptions, setSubcategoryOptions] = useState([]);
     const [showSubcategories, setShowSubcategories] = useState(false);
-    
+    const [loading, setLoading] = useState(false);
+
     // redux
     const { user } = useSelector((state) => ({ ...state }));
 
     useEffect(() => {
         loadCategories();
-    }, [])
+    }, []);
 
-    const loadCategories = () => getCategories().then((c) => {
-        setValues({ ...values, categories: c.data });
-    });
+    const loadCategories = () =>
+        getCategories().then((c) => {
+            setValues({ ...values, categories: c.data });
+        });
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -59,15 +61,14 @@ const ProductCreate = ({ history }) => {
 
     const handleCategoryChange = (e) => {
         e.preventDefault();
-        console.log('clicked category', e.target.value);
+        console.log("clicked category", e.target.value);
         setValues({ ...values, subcategories: [], category: e.target.value });
-        getCategorySubs(e.target.value)
-        .then((res) => {
-            console.log('getcategorysubs', res);
+        getCategorySubs(e.target.value).then((res) => {
+            console.log("getcategorysubs", res);
             setSubcategoryOptions(res.data);
         });
         setShowSubcategories(true);
-    }
+    };
 
     // const isFormValid = Object.values(values).every(val => val !== "");
 
@@ -81,8 +82,14 @@ const ProductCreate = ({ history }) => {
                     <h4>Create a product</h4>
                     <hr />
                     <div className="p-3">
-                        <FileUpload />
+                        <FileUpload
+                            values={values}
+                            setValues={setValues}
+                            setLoading={setLoading}
+                            loading={loading}
+                        />
                     </div>
+                    {JSON.stringify(values.images)}
                     <ProductCreateForm
                         handleSubmit={handleSubmit}
                         handleChange={handleChange}
