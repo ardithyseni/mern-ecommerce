@@ -65,9 +65,31 @@ const FileUpload = ({ values, setValues, setLoading, loading }) => {
     // send back to server to upload to cloudinary
     // set url to images[] in the parent component state - ProductCreate
 
-    const handleRemoveImage = (imageid) => {
+    const handleRemoveImage = (public_id) => {
         setLoading(true);
-        console.log("remove image invoked", imageid);
+        // console.log("remove image", public_id);
+        axios
+            .post(
+                `${process.env.REACT_APP_API}/removeimage`,
+                { public_id },
+                {
+                    headers: {
+                        idtoken: user ? user.token : "",
+                    },
+                }
+            )
+            .then((res) => {
+                setLoading(false);
+                const { images } = values;
+                let filteredImages = images.filter((item) => {
+                    return item.public_id !== public_id;
+                });
+                setValues({ ...values, images: filteredImages });
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
     };
 
     return (
@@ -93,7 +115,7 @@ const FileUpload = ({ values, setValues, setLoading, loading }) => {
                             count="X"
                             key={image.public_id}
                             onClick={() => handleRemoveImage(image.public_id)}
-                            style={{cursor: 'pointer'}}
+                            style={{ cursor: 'pointer' }}
                         >
                             <Image width={150} src={image.url} />
                         </Badge>
