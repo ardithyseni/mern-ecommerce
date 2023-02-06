@@ -99,6 +99,7 @@ const ProductCreate = ({ history }) => {
                         subcategoryOptions={subcategoryOptions}
                         showSubcategories={showSubcategories}
                     />
+                    <br />
                 </div>
             </div>
         </div>

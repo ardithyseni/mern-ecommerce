@@ -97,7 +97,7 @@ const FileUpload = ({ values, setValues, setLoading, loading }) => {
             <div className="row">
                 <div className="form-group">
                     <label>
-                        {loading ? <LoadingOutlined style={{ fontSize: "20px" }} /> : "Choose images"}
+                        {loading ? <LoadingOutlined style={{ fontSize: "30px" }} /> : "Choose images"}
                     </label>
                     <input
                         type="file"
