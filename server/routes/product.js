@@ -7,6 +7,6 @@ import { createProduct, listProducts } from "../controllers/product.js";
 import { authCheck, adminCheck } from '../middlewares/auth.js';
 
 router.post('/product', authCheck, adminCheck, createProduct);
-router.get('/products', listProducts);
+router.get('/products/:count', listProducts);
 
 export default router;
