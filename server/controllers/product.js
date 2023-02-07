@@ -35,3 +35,15 @@ export const listProductsByCount = async (req, res) => {
         .exec();
     res.json(products);
 }
+
+export const deleteProduct = async (req, res) => {
+    try {
+        const deletedProduct = await Product.findOneAndRemove({
+            slug: req.params.slug
+        }).exec();
+        res.json("deleted this product", deletedProduct)
+    } catch (error) {
+        console.log(err);
+        return res.status(400).send('Product delete controller failed');
+    }
+}

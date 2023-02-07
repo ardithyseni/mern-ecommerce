@@ -27,7 +27,7 @@ const AdminProductCard = ({ product }) => {
             <Meta
                 // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                 title={title}
-                // description="This is the description"
+                description={`${description && description.substring(0, 45)}...`}
             />
         </Card>
     )
