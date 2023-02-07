@@ -1,12 +1,12 @@
 import React from 'react'
 import { Avatar, Card } from 'antd';
-import { SettingOutlined, EllipsisOutlined, EditOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 const { Meta } = Card;
 
-const AdminProductCard = ({ product }) => {
+const AdminProductCard = ({ product, loading, handleRemoveProduct, handleCancelModal, showModal }) => {
 
     //destructuring the properties
-    const { title, description, images} = product
+    const { title, description, images, slug } = product
     return (
         <Card
             style={{
@@ -14,14 +14,15 @@ const AdminProductCard = ({ product }) => {
             }}
             cover={
                 <img
-                    src={images && images.length ? images[0].url: 'https://via.placeholder.com/300x200'}
+                    src={images && images.length ? images[0].url : 'https://via.placeholder.com/300x200'}
                     className="p-1"
                 />
             }
             actions={[
-                <SettingOutlined key="setting" />,
                 <EditOutlined key="edit" />,
-                <EllipsisOutlined key="ellipsis" />,
+                <DeleteOutlined key="delete" onClick={() => {
+                    showModal()
+                    handleRemoveProduct(slug)}} />,
             ]}
         >
             <Meta

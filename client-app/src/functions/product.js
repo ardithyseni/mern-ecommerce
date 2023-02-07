@@ -11,3 +11,11 @@ export const createProduct = async (product, idtoken) => {
 export const getProductsByCount = async (count) => {
   return await axios.get(`${process.env.REACT_APP_API}/products/${count}`);
 };
+
+export const deleteProduct = async (slug, idtoken) => {
+  return await axios.delete(`${process.env.REACT_APP_API}/product/${slug}`, {
+    headers: {
+      idtoken
+    }  
+  });
+};
