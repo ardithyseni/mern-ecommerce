@@ -33,4 +33,4 @@ const AdminProductCard = ({ product }) => {
     )
 }
 
-export default AdminProductCard
+export default AdminProductCard;
