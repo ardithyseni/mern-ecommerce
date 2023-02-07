@@ -18,10 +18,20 @@ export const createProduct = async (req, res) => {
 
 export const listProducts = async (req, res) => {
     let products = await Product.find({})
-    .limit(parseInt(req.params.count))
-    .populate('category')
-    .populate('subcategories')
-    .sort([['createdAt', 'desc']])
-    .exec();
+    // .limit(parseInt(req.params.count))
+    // .populate('category')
+    // .populate('subcategories')
+    // .sort([['createdAt', 'desc']])
+    // .exec();
+    res.json(products);
+}
+
+export const listProductsByCount = async (req, res) => {
+    let products = await Product.find({})
+        .limit(parseInt(req.params.count))
+        .populate('category')
+        .populate('subcategories')
+        .sort([['createdAt', 'desc']])
+        .exec();
     res.json(products);
 }
