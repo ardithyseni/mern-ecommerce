@@ -3,11 +3,17 @@ import AdminNav from "../../../components/nav/AdminNav";
 import { getProductsByCount, deleteProduct } from "../../../functions/product";
 import AdminProductCard from "../../../components/cards/AdminProductCard";
 import { Modal, Button, Spin } from "antd";
+import { useSelector } from "react-redux";
+import { toast } from 'react-toastify'
+
+
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const { user } = useSelector((state) => ({ ...state }));
+  
   useEffect(() => {
     loadAllProducts();
   }, []);
@@ -34,8 +40,18 @@ const AllProducts = () => {
   //   setOpen(false);
   // };
 
-  const handleRemoveProduct = (slug) => {
-    console.log("send delete request", slug);
+  const handleRemoveProduct = async (slug) => {
+    console.log(slug);
+
+    deleteProduct(slug, user.token)
+    .then((res) => {
+      console.log(res);
+      loadAllProducts();
+      toast.success(`Deleted ${res.data.title}`);
+    }).catch((err) => {
+      toast.error(err.response.data);
+      console.log(err);
+    })
   };
 
   return (

@@ -33,7 +33,7 @@ const AdminProductCard = ({
                     <EditOutlined key="edit" />,
                     <Popconfirm
                         title="Delete this product?"
-                        onConfirm={handleRemoveProduct}
+                        onConfirm={()=> handleRemoveProduct(slug)}
                         // onCancel={cancel}
                         okText="Yes"
                         cancelText="No">
