@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Card, Button, Popconfirm } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Link } from 'react-router-dom';
 const { Meta } = Card;
 
 const AdminProductCard = ({
@@ -30,7 +31,9 @@ const AdminProductCard = ({
                     />
                 }
                 actions={[
-                    <EditOutlined key="edit" />,
+                    <Link to={`/admin/product/${slug}`}>
+                        <EditOutlined key="edit" />,
+                    </Link>,
                     <Popconfirm
                         title="Delete this product?"
                         onConfirm={()=> handleRemoveProduct(slug)}
