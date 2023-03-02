@@ -3,15 +3,45 @@ import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { createProduct } from "../../../functions/product";
+import { getProductBySlug } from "../../../functions/product";
 import { getCategories, getCategorySubs } from "../../../functions/category";
-import ProductCreateForm from "../../../components/forms/ProductCreateForm";
 import FileUpload from "../../../components/forms/FileUpload";
+import { useParams } from "react-router-dom";
 
-const ProductUpdate = ({ history }) => {
-  
-    // redux
+
+const initialState = {
+    title: "",
+    description: "",
+    price: "",
+    categories: [],
+    category: "",
+    subcategories: [],
+    quantity: "",
+    images: [],
+    shipping: "",
+    color: "",
+    brand: "",
+};
+
+const ProductUpdate = (props) => {
+
+    const [values, setValues] = useState(initialState);
+
     const { user } = useSelector((state) => ({ ...state }));
+
+    let { slug } = useParams();
+
+    useEffect(() => {
+        loadProductBySlug();
+    }, [])
+
+    const loadProductBySlug = () => {
+        getProductBySlug(slug)
+        .then(p => {
+            // console.log('single product by slug', p);
+            setValues({...values, ...p.data });
+        })
+    }
 
     return (
         <div className="container-fluid">
@@ -21,6 +51,7 @@ const ProductUpdate = ({ history }) => {
                 </div>
                 <div className="col-md-7">
                     <h4>Update Product</h4>
+                    {JSON.stringify(values)}
                     <hr />
 
                 </div>

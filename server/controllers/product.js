@@ -53,3 +53,12 @@ export const removeProduct = async (req, res) => {
     return res.status(400).send("Product remove controller failed");
   }
 };
+
+export const getBySlug = async (req, res) => {
+  const product = await Product.findOne({ slug: req.params.slug })
+    .populate("category")
+    .populate("subcategories")
+    .exec();
+
+  res.json(product);
+};
