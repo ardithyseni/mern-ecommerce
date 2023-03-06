@@ -9,7 +9,6 @@ import FileUpload from "../../../components/forms/FileUpload";
 import { useParams } from "react-router-dom";
 import ProductUpdateForm from "../../../components/forms/ProductUpdateForm";
 
-
 const initialState = {
     title: "",
     description: "",
@@ -25,11 +24,12 @@ const initialState = {
 };
 
 const ProductUpdate = (props) => {
-
     const [values, setValues] = useState(initialState);
     const [categories, setCategories] = useState([]);
     // const [subcategories, setSubcategories] = useState([]);
     const [subcategoryOptions, setSubcategoryOptions] = useState([]);
+    const [arrayOfSubs, setArrayOfSubs] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     const { user } = useSelector((state) => ({ ...state }));
 
@@ -38,15 +38,27 @@ const ProductUpdate = (props) => {
     useEffect(() => {
         loadProductBySlug();
         loadCategories();
-    }, [])
+    }, []);
 
     const loadProductBySlug = () => {
-        getProductBySlug(slug)
-            .then(p => {
-                // console.log('single product by slug', p);
-                setValues({ ...values, ...p.data });
-            })
-    }
+        getProductBySlug(slug).then((p) => {
+            // console.log("single product", p);
+            // 1 load single proudct
+            setValues({ ...values, ...p.data });
+            // 2 load single product category subs
+            getCategorySubs(p.data.category._id).then((res) => {
+                setSubcategoryOptions(res.data); // on first load, show default subs
+            });
+            // 3 prepare array of sub ids to show as default sub values in antd Select
+            let arr = [];
+            p.data.subcategories.map((s) => {
+                arr.push(s._id);
+            });
+            console.log("ARR", arr);
+            setArrayOfSubs((prev) => arr); // required for ant design select to work
+            //   console.log("ARR of subs", arrayofSubs);
+        });
+    };
 
     const loadCategories = () =>
         getCategories().then((c) => {
@@ -57,7 +69,7 @@ const ProductUpdate = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         //
-    }
+    };
 
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -66,13 +78,27 @@ const ProductUpdate = (props) => {
 
     const handleCategoryChange = (e) => {
         e.preventDefault();
-        console.log("clicked category", e.target.value);
-        setValues({ ...values, subcategories: [], category: e.target.value });
+        console.log("CLICKED CATEGORY", e.target.value);
+        setValues({ ...values, subcategories: [] });
+
+        setSelectedCategory(e.target.value);
+
         getCategorySubs(e.target.value).then((res) => {
-            console.log("getcategorysubs", res);
+            console.log("SUB OPTIONS ON CATGORY CLICK", res);
             setSubcategoryOptions(res.data);
         });
+
+        console.log("EXISTING CATEGORY values.category", values.category);
+
+        // if user clicks back to the original category
+        // show its sub categories in default
+        if (values.category._id === e.target.value) {
+            loadProductBySlug();
+        }
+        // clear old sub category ids
+        setArrayOfSubs([]);
     };
+
 
     return (
         <div className="container-fluid">
@@ -86,17 +112,17 @@ const ProductUpdate = (props) => {
                     <ProductUpdateForm
                         handleSubmit={handleSubmit}
                         handleChange={handleChange}
-                        values={values}
                         setValues={setValues}
-                        categories={categories}
+                        values={values}
                         handleCategoryChange={handleCategoryChange}
-                        // subcategories={subcategories}
+                        categories={categories}
                         subcategoryOptions={subcategoryOptions}
-
+                        arrayOfSubs={arrayOfSubs}
+                        setArrayOfSubs={setArrayOfSubs}
+                        selectedCategory={selectedCategory}
 
                     />
                     <hr />
-
                 </div>
             </div>
         </div>

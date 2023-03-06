@@ -42,6 +42,11 @@ const ProductCreate = ({ history }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const hasEmptyFields = Object.values(values).some((value) => !value);
+        if (hasEmptyFields) {
+            alert("Please fill in all fields");
+            return;
+        }
         createProduct(values, user.token)
             .then((res) => {
                 console.log(res);

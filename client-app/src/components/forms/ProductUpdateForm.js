@@ -10,7 +10,10 @@ const ProductUpdateForm = ({
     setValues,
     categories,
     // subcategories,
+    arrayOfSubs,
+    setArrayOfSubs,
     subcategoryOptions,
+    selectedCategory,
 }) => {
 
     // destructure
@@ -19,7 +22,7 @@ const ProductUpdateForm = ({
         description,
         price,
         category,
-        subcategories,
+        // subcategories,
         quantity,
         images,
         shipping,
@@ -27,6 +30,8 @@ const ProductUpdateForm = ({
         brand,
     } = values;
 
+    console.log(arrayOfSubs);
+    
     return (
         <form onSubmit={handleSubmit}>
             <div className="form-group">
@@ -123,11 +128,10 @@ const ProductUpdateForm = ({
                 <select
                     className="custom-select"
                     name="category"
-                    required={true}
+                    // required={true}
                     onChange={handleCategoryChange}
-                    defaultValue="Select"
+                    value={selectedCategory ? selectedCategory : category._id}
                 >
-                    <option>{category ? category.name : "Please select"}</option>
                     {categories.length > 0 &&
                         categories.map((c) => (
                             <option key={c._id} value={c._id}>
@@ -143,15 +147,13 @@ const ProductUpdateForm = ({
                     mode="multiple"
                     allowClear
                     placeholder="Select"
-                    // value={subcategories}
+                    value={arrayOfSubs}
                     style={{
                         width: "100%",
                     }}
-                    onChange={(value) =>
-                        setValues({ ...values, subcategories: value })
-                    }
+                    onChange={(value) => setArrayOfSubs(value)}
                 >
-                    {subcategoryOptions.length > 0 &&
+                    {subcategoryOptions.length &&
                         subcategoryOptions.map((s) => (
                             <Option key={s._id} value={s._id}>
                                 {s.name}
@@ -180,7 +182,7 @@ const ProductUpdateForm = ({
                             Create
                         </Button> */}
             <button type="submit" className="btn btn-primary">
-                Create Product
+                Update Product
             </button>
         </form>
     );
