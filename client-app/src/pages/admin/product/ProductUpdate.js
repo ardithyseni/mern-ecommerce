@@ -7,13 +7,14 @@ import { getProductBySlug } from "../../../functions/product";
 import { getCategories, getCategorySubs } from "../../../functions/category";
 import FileUpload from "../../../components/forms/FileUpload";
 import { useParams } from "react-router-dom";
+import ProductUpdateForm from "../../../components/forms/ProductUpdateForm";
 
 
 const initialState = {
     title: "",
     description: "",
     price: "",
-    categories: [],
+    // categories: [],
     category: "",
     subcategories: [],
     quantity: "",
@@ -26,22 +27,52 @@ const initialState = {
 const ProductUpdate = (props) => {
 
     const [values, setValues] = useState(initialState);
+    const [categories, setCategories] = useState([]);
+    // const [subcategories, setSubcategories] = useState([]);
+    const [subcategoryOptions, setSubcategoryOptions] = useState([]);
 
     const { user } = useSelector((state) => ({ ...state }));
 
-    let { slug } = useParams();
+    const { slug } = useParams();
 
     useEffect(() => {
         loadProductBySlug();
+        loadCategories();
     }, [])
 
     const loadProductBySlug = () => {
         getProductBySlug(slug)
-        .then(p => {
-            // console.log('single product by slug', p);
-            setValues({...values, ...p.data });
-        })
+            .then(p => {
+                // console.log('single product by slug', p);
+                setValues({ ...values, ...p.data });
+            })
     }
+
+    const loadCategories = () =>
+        getCategories().then((c) => {
+            // setValues({ ...values, categories: c.data });
+            setCategories(c.data);
+        });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        //
+    }
+
+    const handleChange = (e) => {
+        setValues({ ...values, [e.target.name]: e.target.value });
+        // console.log(e.target.name, "--", e.target.value);
+    };
+
+    const handleCategoryChange = (e) => {
+        e.preventDefault();
+        console.log("clicked category", e.target.value);
+        setValues({ ...values, subcategories: [], category: e.target.value });
+        getCategorySubs(e.target.value).then((res) => {
+            console.log("getcategorysubs", res);
+            setSubcategoryOptions(res.data);
+        });
+    };
 
     return (
         <div className="container-fluid">
@@ -51,7 +82,19 @@ const ProductUpdate = (props) => {
                 </div>
                 <div className="col-md-7">
                     <h4>Update Product</h4>
-                    {JSON.stringify(values)}
+                    {/* {JSON.stringify(values)} */}
+                    <ProductUpdateForm
+                        handleSubmit={handleSubmit}
+                        handleChange={handleChange}
+                        values={values}
+                        setValues={setValues}
+                        categories={categories}
+                        handleCategoryChange={handleCategoryChange}
+                        // subcategories={subcategories}
+                        subcategoryOptions={subcategoryOptions}
+
+
+                    />
                     <hr />
 
                 </div>
