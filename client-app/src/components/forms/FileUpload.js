@@ -108,16 +108,16 @@ const FileUpload = ({ values, setValues, setLoading, loading }) => {
                     />
                 </div>
             </div>
-            <div className="row">
+            <div className="row mx-3 justify-content-start">
                 {values.images &&
                     values.images.map((image) => (
                         <Badge
                             count="X"
                             key={image.public_id}
                             onClick={() => handleRemoveImage(image.public_id)}
-                            style={{ cursor: 'pointer' }}
+                            style={{ cursor: 'pointer', marginLeft: '55px'}}
                         >
-                            <Image width={150} src={image.url} />
+                            <Image style={{marginLeft: '15px'}} width={150} src={image.url} />
                         </Badge>
                     ))}
                 {/* <Badge count="X" style={{cursor: 'pointer'}}>

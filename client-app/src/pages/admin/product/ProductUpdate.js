@@ -30,7 +30,8 @@ const ProductUpdate = (props) => {
     const [subcategoryOptions, setSubcategoryOptions] = useState([]);
     const [arrayOfSubs, setArrayOfSubs] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
-
+    const [loading, setLoading] = useState(false);
+    
     const { user } = useSelector((state) => ({ ...state }));
 
     const { slug } = useParams();
@@ -108,7 +109,15 @@ const ProductUpdate = (props) => {
                 </div>
                 <div className="col-md-7">
                     <h4>Update Product</h4>
-                    {/* {JSON.stringify(values)} */}
+                    <hr />
+                    <div className="p-3">
+                        <FileUpload
+                            values={values}
+                            setValues={setValues}
+                            setLoading={setLoading}
+                            loading={loading}
+                        />
+                    </div>
                     <ProductUpdateForm
                         handleSubmit={handleSubmit}
                         handleChange={handleChange}
