@@ -64,7 +64,7 @@ const AllProducts = () => {
             <AdminNav />
           </div>
 
-          <div className="col">
+          <div className="col-md-10">
             <h4>All Products</h4>
             
               <div className="row d-flex flex-wrap">

@@ -1,26 +1,17 @@
 import React from "react";
 import { Modal, Card, Button, Popconfirm } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from 'react-router-dom';
 const { Meta } = Card;
 
-const AdminProductCard = ({
-    open,
-    product,
-    loading,
-    handleRemoveProduct,
-    handleCancelModal,
-    showModal,
-}) => {
-    //destructuring the properties
+const ProductCard = ({product}) => {
     const { title, description, images, slug } = product;
     return (
-        <>
+        <Link to={`/product/${slug}`}>
             <Card
-            hoverable
+                hoverable
                 style={{
                     width: 300,
-                    // height: 400,
                     boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.15)',
                 }}
                 cover={
@@ -41,28 +32,26 @@ const AdminProductCard = ({
                 }
                 actions={[
                     <Link to={`/admin/product/${slug}`}>
-                        <EditOutlined key="edit" />,
+                        {/* <EyeOutlined key="eye" />, */}
+                        View Product
                     </Link>,
                     <Popconfirm
                         title="Delete this product?"
-                        onConfirm={() => handleRemoveProduct(slug)}
+                        // onConfirm={() => handleRemoveProduct(slug)}
                         // onCancel={cancel}
                         okText="Yes"
                         cancelText="No">
-                        <DeleteOutlined type="button" key="delete" />,
+                        <ShoppingCartOutlined style={{ fontSize: '23px' }}  type="button" key="cart" />,
                     </Popconfirm>,
                 ]}
             >
                 <Meta
-                    // avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                     title={title}
-                    description={`${description && description.substring(0, 50)
-                        }...`}
+                    description={`${description && description.substring(0, 50)}...`}
                 />
             </Card>
-
-        </>
+        </Link>
     );
 };
 
-export default AdminProductCard;
+export default ProductCard;
