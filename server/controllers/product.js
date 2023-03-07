@@ -68,7 +68,7 @@ export const updateProduct = async (req, res) => {
         if (req.body.title) {
             req.body.slug = slugify(req.body.title);
         }
-        const updatedProduct = await Product.findByIdAndUpdate(
+        const updatedProduct = await Product.findOneAndUpdate(
             { slug: req.params.slug },
             req.body,
             { new: true }
@@ -77,6 +77,8 @@ export const updateProduct = async (req, res) => {
         res.json(updatedProduct);
     } catch (error) {
         console.log("update product error", error);
-        return res.status(400).send("product update failed");
+        res.status(400).json({
+            error: error.message,
+        });
     }
 };

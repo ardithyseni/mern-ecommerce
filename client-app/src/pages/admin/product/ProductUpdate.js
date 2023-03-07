@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getProductBySlug } from "../../../functions/product";
+import { getProductBySlug, updateProduct } from "../../../functions/product";
 import { getCategories, getCategorySubs } from "../../../functions/category";
 import FileUpload from "../../../components/forms/FileUpload";
 import { useParams } from "react-router-dom";
@@ -35,6 +35,8 @@ const ProductUpdate = (props) => {
     const { user } = useSelector((state) => ({ ...state }));
 
     const { slug } = useParams();
+
+    const history = useHistory();
 
     useEffect(() => {
         loadProductBySlug();
@@ -69,7 +71,21 @@ const ProductUpdate = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //
+        setLoading(true);
+
+        values.subcategories = arrayOfSubs;
+        values.category = selectedCategory ? selectedCategory : values.category;
+
+        updateProduct(slug, values, user.token)
+        .then((res) => {
+            setLoading(false);
+            toast.success(`"${res.data.title}" has been updated`);
+            history.push("/admin/products");
+        }).catch((err) => {
+            console.log(err);
+            setLoading(false);
+            // toast.error(err.response.data.err);
+        })
     };
 
     const handleChange = (e) => {
