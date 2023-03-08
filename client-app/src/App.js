@@ -25,6 +25,8 @@ import UpdateSubcategory from './pages/admin/subcategory/UpdateSubcategory';
 import ProductCreate from './pages/admin/product/ProductCreate';
 import AllProducts from './pages/admin/product/AllProducts';
 import ProductUpdate from './pages/admin/product/ProductUpdate';
+import ProductDetails from './pages/ProductDetails';
+
 const App = () => {
 
   const dispatch = useDispatch();
@@ -88,6 +90,7 @@ const App = () => {
         <AdminRoute exact path="/admin/product" component={ProductCreate} />
         <AdminRoute exact path="/admin/product/:slug" component={ProductUpdate} />
         <AdminRoute exact path="/admin/products" component={AllProducts} />
+        <AdminRoute exact path="/product/:slug" component={ProductDetails} />
       </Switch>
     </>
   );

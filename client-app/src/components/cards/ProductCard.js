@@ -31,7 +31,7 @@ const ProductCard = ({product, loading}) => {
                     />
                 }
                 actions={[
-                    <Link to={`/admin/product/${slug}`}>
+                    <Link to={`/product/${slug}`}>
                         {/* <EyeOutlined key="eye" />, */}
                         View Product
                     </Link>,

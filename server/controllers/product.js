@@ -54,7 +54,7 @@ export const removeProduct = async (req, res) => {
     }
 };
 
-export const getBySlug = async (req, res) => {
+export const getProductBySlug = async (req, res) => {
     const product = await Product.findOne({ slug: req.params.slug })
         .populate("category")
         .populate("subcategories")

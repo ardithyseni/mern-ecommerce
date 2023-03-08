@@ -5,7 +5,7 @@ import {
     createProduct,
     updateProduct,
     listProducts,
-    getBySlug,
+    getProductBySlug,
     listProductsByCount,
     removeProduct,
     listProductsByFilter,
@@ -21,7 +21,7 @@ router.get("/products/total", countProducts);
 
 router.get("/products/:count", listProductsByCount);
 router.delete("/product/:slug", authCheck, adminCheck, removeProduct);
-router.get("/product/:slug", getBySlug);
+router.get("/product/:slug", getProductBySlug);
 router.put("/product/:slug", authCheck, adminCheck, updateProduct);
 
 router.post("/products", listProductsByFilter)
