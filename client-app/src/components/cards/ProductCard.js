@@ -1,10 +1,10 @@
 import React from "react";
-import { Modal, Card, Button, Popconfirm } from "antd";
+import { Skeleton, Card, Button, Popconfirm } from "antd";
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from 'react-router-dom';
 const { Meta } = Card;
 
-const ProductCard = ({product}) => {
+const ProductCard = ({product, loading}) => {
     const { title, description, images, slug } = product;
     return (
         <Link to={`/product/${slug}`}>
@@ -45,10 +45,13 @@ const ProductCard = ({product}) => {
                     </Popconfirm>,
                 ]}
             >
+            <Skeleton loading={loading}>
+
                 <Meta
                     title={title}
                     description={`${description && description.substring(0, 50)}...`}
                 />
+                </Skeleton>
             </Card>
         </Link>
     );

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { getProductsByCount, deleteProduct } from "../../../functions/product";
 import AdminProductCard from "../../../components/cards/AdminProductCard";
-import { Modal, Button, Spin } from "antd";
+import { Card, Skeleton } from "antd";
 import { useSelector } from "react-redux";
 import { toast } from 'react-toastify'
 
@@ -13,7 +13,7 @@ const AllProducts = () => {
   const [loading, setLoading] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
-  
+
   useEffect(() => {
     loadAllProducts();
   }, []);
@@ -44,14 +44,14 @@ const AllProducts = () => {
     console.log(slug);
 
     deleteProduct(slug, user.token)
-    .then((res) => {
-      console.log(res);
-      loadAllProducts();
-      toast.success(`Deleted ${res.data.title}`);
-    }).catch((err) => {
-      toast.error(err.response.data);
-      console.log(err);
-    })
+      .then((res) => {
+        console.log(res);
+        loadAllProducts();
+        toast.success(`Deleted ${res.data.title}`);
+      }).catch((err) => {
+        toast.error(err.response.data);
+        console.log(err);
+      })
   };
 
   return (
@@ -66,7 +66,17 @@ const AllProducts = () => {
 
           <div className="col-md-10">
             <h4>All Products</h4>
-            
+
+            {loading ? (<div className="row d-flex flex-wrap">
+              {[...Array(9)].map((_, index) => (
+                <div className="col-md-4 mb-4 mt-4" key={index}>
+                  <Card style={{ width: 300 }}>
+                    <Skeleton active loading={loading}></Skeleton>
+                  </Card>
+                </div>
+              ))}
+            </div>
+            ) : (
               <div className="row d-flex flex-wrap">
                 {products.map((product) => (
                   <div
@@ -82,6 +92,8 @@ const AllProducts = () => {
                   </div>
                 ))}
               </div>
+
+            )}
           </div>
         </div>
       </div>
