@@ -8,6 +8,7 @@ import {
     getBySlug,
     listProductsByCount,
     removeProduct,
+    listProductsByFilter
 } from "../controllers/product.js";
 
 // middlewares
@@ -19,5 +20,7 @@ router.get("/products/:count", listProductsByCount);
 router.delete("/product/:slug", authCheck, adminCheck, removeProduct);
 router.get("/product/:slug", getBySlug);
 router.put("/product/:slug", authCheck, adminCheck, updateProduct);
+
+router.post("/products", listProductsByFilter)
 
 export default router;
