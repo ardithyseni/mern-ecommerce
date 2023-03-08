@@ -85,7 +85,7 @@ export const updateProduct = async (req, res) => {
 
 export const listProductsByFilter = async (req, res) => {
     try {
-            // createdAt | updatedAt,  desc | asc,  3
+        // createdAt | updatedAt,  desc | asc,  3
         const { sort, order, limit } = req.body;
         const productsToFilter = await Product.find({})
             .populate("category")
@@ -93,10 +93,18 @@ export const listProductsByFilter = async (req, res) => {
             .sort([[sort, order]])
             .limit(limit)
             .exec();
-            
-            res.json(productsToFilter);
-            
+
+        res.json(productsToFilter);
+
     } catch (error) {
         console.log(error);
     }
-}
+};
+
+export const countProducts = async (req, res) => {
+    let total = await Product.find({})
+        .estimatedDocumentCount()
+        .exec();
+    
+    res.json(total);
+};
