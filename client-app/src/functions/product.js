@@ -1,33 +1,45 @@
 import axios from "axios";
 
 export const createProduct = async (product, idtoken) => {
-  return await axios.post(`${process.env.REACT_APP_API}/product`, product, {
-    headers: {
-      idtoken
-    }
-  });
+    return await axios.post(`${process.env.REACT_APP_API}/product`, product, {
+        headers: {
+            idtoken,
+        },
+    });
 };
 
 export const getProductsByCount = async (count) => {
-  return await axios.get(`${process.env.REACT_APP_API}/products/${count}`);
+    return await axios.get(`${process.env.REACT_APP_API}/products/${count}`);
 };
 
 export const getProductBySlug = async (slug) => {
-  return await axios.get(`${process.env.REACT_APP_API}/product/${slug}`);
+    return await axios.get(`${process.env.REACT_APP_API}/product/${slug}`);
 };
 
 export const updateProduct = async (slug, product, idtoken) => {
-  return await axios.put(`${process.env.REACT_APP_API}/product/${slug}`, product, {
-    headers: {
-      idtoken
-    }
-  });
+    return await axios.put(
+        `${process.env.REACT_APP_API}/product/${slug}`,
+        product,
+        {
+            headers: {
+                idtoken,
+            },
+        }
+    );
 };
 
 export const deleteProduct = async (slug, idtoken) => {
-  return await axios.delete(`${process.env.REACT_APP_API}/product/${slug}`, {
-    headers: {
-      idtoken
-    }
-  });
+    return await axios.delete(`${process.env.REACT_APP_API}/product/${slug}`, {
+        headers: {
+            idtoken,
+        },
+    });
+};
+
+export const getProductsByFilter = async (sort, order, limit) => {
+    return await axios.post(`${process.env.REACT_APP_API}/products`, {
+        sort,
+        order,
+        limit,
+    });
 };
