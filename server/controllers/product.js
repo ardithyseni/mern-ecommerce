@@ -83,15 +83,41 @@ export const updateProduct = async (req, res) => {
     }
 };
 
+// without pagination
+
+// export const listProductsByFilter = async (req, res) => {
+//     try {
+//         // createdAt | updatedAt,  desc | asc,  3
+//         const { sort, order, limit } = req.body;
+//         const productsToFilter = await Product.find({})
+//             .populate("category")
+//             .populate("subcategories")
+//             .sort([[sort, order]])
+//             .limit(limit)
+//             .exec();
+
+//         res.json(productsToFilter);
+
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
+
+// with pagination
 export const listProductsByFilter = async (req, res) => {
+    console.table(req.body);
     try {
         // createdAt | updatedAt,  desc | asc,  3
-        const { sort, order, limit } = req.body;
+        const { sort, order, pageNumber } = req.body;
+        const currentPage = pageNumber || 1;
+        const perPage = 3;
+
         const productsToFilter = await Product.find({})
+            .skip((currentPage - 1) * perPage)
             .populate("category")
             .populate("subcategories")
             .sort([[sort, order]])
-            .limit(limit)
+            .limit(perPage)
             .exec();
 
         res.json(productsToFilter);
@@ -105,6 +131,6 @@ export const countProducts = async (req, res) => {
     let total = await Product.find({})
         .estimatedDocumentCount()
         .exec();
-    
+
     res.json(total);
 };

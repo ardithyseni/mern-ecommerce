@@ -36,10 +36,15 @@ export const deleteProduct = async (slug, idtoken) => {
     });
 };
 
-export const getProductsByFilter = async (sort, order, limit) => {
+export const getProductsByFilter = async (sort, order, pageNumber) => {
     return await axios.post(`${process.env.REACT_APP_API}/products`, {
         sort,
         order,
-        limit,
+        pageNumber,
     });
+};
+
+
+export const countProducts = async () => {
+    return await axios.get(`${process.env.REACT_APP_API}/products/total`);
 };

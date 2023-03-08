@@ -1,20 +1,26 @@
-import { Skeleton, Card } from "antd";
+import { Skeleton, Card, Pagination } from "antd";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../cards/ProductCard";
-import { getProductsByCount, getProductsByFilter } from "../../functions/product";
+import { getProductsByCount, getProductsByFilter, countProducts } from "../../functions/product";
 
 const NewArrivals = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [productsCount, setProductsCount] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
     loadAllProducts();
+  }, [pageNumber]);
+
+  useEffect(() => {
+    countProducts().then((res) => setProductsCount(res.data));
   }, []);
 
   const loadAllProducts = () => {
     setLoading(true);
     // getProductsByFilter(sort, order, limit)
-    getProductsByFilter('createdAt', 'desc', '3').then((res) => {
+    getProductsByFilter('createdAt', 'desc', pageNumber).then((res) => {
       setProducts(res.data);
       setLoading(false);
     });
@@ -44,6 +50,12 @@ const NewArrivals = () => {
           </div>
         )}
       </div>
+      <Pagination 
+      current={pageNumber} 
+      total={(productsCount / 3) * 10} 
+      onChange={value => setPageNumber(value)} 
+
+      />
     </>
   );
 };
