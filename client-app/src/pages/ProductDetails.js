@@ -33,13 +33,15 @@ const ProductDetails = ({ match }) => {
     }
 
     return (
-        <div className='container-fluid'>
+        <div className='container-fluid px-5'>
             {/* Product image and details  START*/}
             <div className='row pt-4'>
-                <div className='col-md-7'>
-                    {/* image carousel */}
+                <div className='col-md-6'>
+                    <Carousel showArrows={true} style={{ border: '1px solid lightgray'}}>
+                        {images && images.map((i) => <img src={i.url} key={i.public_id} />)}
+                    </Carousel>
                 </div>
-                <div className='col-md-5'>
+                <div className='col-md-6'>
                     <Card
                         actions={[
                             <>
@@ -48,8 +50,8 @@ const ProductDetails = ({ match }) => {
                                 Add to Cart
                             </>,
                             <Link to="/">
-                                <HeartOutlined className='text-danger' style={{ fontSize: '23px' }} type="button" key="heart"/>
-                                <br /> 
+                                <HeartOutlined className='text-danger' style={{ fontSize: '23px' }} type="button" key="heart" />
+                                <br />
                                 Add to Wishlist
                             </Link>
                         ]}>
