@@ -6,3 +6,7 @@
 .carousel-slider {
     border: 1px solid rgb(240, 240, 240);
 }
+
+.ant-descriptions-title { 
+    font-weight: 400;
+}
