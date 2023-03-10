@@ -137,27 +137,30 @@ export const rateProduct = async (req, res) => {
     const product = await Product.findById(req.params.productId).exec();
     const user = await User.findOne({ email: req.user.email }).exec();
     const { star } = req.body;
-
+    console.log('|||||||||||||||||||');
+    console.log(star);
+    console.log('|||||||||||||||||||');
     // who is updating ?
     // check if currently logged in user has already added a rating to this product
 
     let existingRatingObject = product.ratings.find(
-        (element) => element.postedBy == user._id
+        (element) => element.postedBy.toString() === user._id.toString()
     );
+
     // if user has not left a rating, push it to the ratings array
     if (existingRatingObject === undefined) {
         let ratingAdded = await Product.findByIdAndUpdate(
             product._id,
             {
-                $push: { ratings: { star: star, postedBy: user._id } },
+                $push: { ratings: { star, postedBy: user._id } },
             },
             { new: true }
         ).exec();
-        console.log("ratingAdded", ratingAdded);
+        console.log("ratingAdded", ratingAdded, "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
         res.json(ratingAdded);
-    } else {
-        // if user has already left rating,  update it
-        // find the particular rating that we want to update
+    }
+    else {
+        // if user have already left rating, update it
         const ratingUpdated = await Product.updateOne(
             {
                 ratings: { $elemMatch: existingRatingObject },
@@ -165,7 +168,46 @@ export const rateProduct = async (req, res) => {
             { $set: { "ratings.$.star": star } },
             { new: true }
         ).exec();
-        console.log("rating updated ", ratingUpdated);
+        console.log("ratingUpdated", ratingUpdated);
         res.json(ratingUpdated);
     }
 };
+
+
+/*
+exports.productStar = async (req, res) => {
+  const product = await Product.findById(req.params.productId).exec();
+  const user = await User.findOne({ email: req.user.email }).exec();
+  const { star } = req.body;
+
+  // who is updating?
+  // check if currently logged in user have already added rating to this product?
+  let existingRatingObject = product.ratings.find(
+    (ele) => ele.postedBy.toString() === user._id.toString()
+  );
+
+  // if user haven't left rating yet, push it
+  if (existingRatingObject === undefined) {
+    let ratingAdded = await Product.findByIdAndUpdate(
+      product._id,
+      {
+        $push: { ratings: { star, postedBy: user._id } },
+      },
+      { new: true }
+    ).exec();
+    console.log("ratingAdded", ratingAdded);
+    res.json(ratingAdded);
+  } else {
+    // if user have already left rating, update it
+    const ratingUpdated = await Product.updateOne(
+      {
+        ratings: { $elemMatch: existingRatingObject },
+      },
+      { $set: { "ratings.$.star": star } },
+      { new: true }
+    ).exec();
+    console.log("ratingUpdated", ratingUpdated);
+    res.json(ratingUpdated);
+  }
+};
+*/

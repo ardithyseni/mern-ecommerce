@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { getProductBySlug } from "../functions/product";
+import { getProductBySlug, rateProductFunction } from "../functions/product";
+import { useSelector } from "react-redux";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { Card, Skeleton, Tabs, Descriptions, Tag } from "antd";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import StarRatings from 'react-star-ratings';
+import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
 import RatingModal from "../components/modal/RatingModal";
-
 
 const { Meta } = Card;
 
 const ProductDetails = ({ match }) => {
     const [product, setProduct] = useState();
     const [loading, setLoading] = useState(true);
+    const [star, setStar] = useState(0);
+
+    const { user } = useSelector((state) => ({ ...state }));
 
     const {
         _id,
@@ -45,6 +48,17 @@ const ProductDetails = ({ match }) => {
     if (loading) {
         return <div>Loading...</div>;
     }
+
+    const onStarClick = (newRating, name) => {
+        setStar(newRating);
+        console.table('newRating: ', newRating, name);
+        console.table('star: ', star, name);
+         rateProductFunction(name, newRating, user.token)
+        .then((res) => {
+            console.log('rating clicked', res.data);
+            // loadProduct(); // to show updated rating in real time
+        });
+    };
 
     return (
         <div className="container-fluid px-5">
@@ -143,25 +157,27 @@ const ProductDetails = ({ match }) => {
                                     name={_id}
                                     starRatedColor="rgb(24, 144, 255)"
                                     starHoverColor="rgb(24, 144, 255)"
-                                    changeRating={(newRating, name) => console.log('new Rating', newRating, "name ", name)}
+                                    numberOfStars={5}
+                                    rating={star}
+                                    changeRating={onStarClick}
                                     starDimension="22px"
                                     starSpacing="4px"
                                 />
-                            </RatingModal>
+                            </RatingModal>,
                         ]}
                     >
                         <Skeleton loading={loading}>
                             <Meta
-                                style={{ display: "flex", justifyContent: "center" }}
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                }}
                                 description={
-                                    <div className="custom-meta">
-
-                                    </div>
+                                    <div className="custom-meta"></div>
                                 }
                             />
                         </Skeleton>
                     </Card>
-
                 </div>
             </div>
             {/* Product image and details  END*/}
