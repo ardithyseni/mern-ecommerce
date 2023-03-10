@@ -55,15 +55,12 @@ const productSchema = new mongoose.Schema({
         type: String,
         maxlength: 32,
     },
-    // ratings: [
-    //     {
-    //         star: Number,
-    //         postedBy: {
-    //             type: ObjectId,
-    //             ref: 'User'
-    //         }
-    //     }
-    // ]
+    ratings: [
+        {
+            star: Number,
+            postedBy: { type: ObjectId, ref: 'User' }
+        }
+    ]
 },
     { timeStamps: true }
 );

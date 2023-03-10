@@ -4,7 +4,11 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { Card, Skeleton, Tabs, Descriptions, Tag } from "antd";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import StarRatings from 'react-star-ratings';
 import { Link } from "react-router-dom";
+import RatingModal from "../components/modal/RatingModal";
+
+
 const { Meta } = Card;
 
 const ProductDetails = ({ match }) => {
@@ -12,6 +16,7 @@ const ProductDetails = ({ match }) => {
     const [loading, setLoading] = useState(true);
 
     const {
+        _id,
         title,
         description,
         images,
@@ -109,29 +114,8 @@ const ProductDetails = ({ match }) => {
                         <Descriptions.Item span={3} label="Price">
                             <b>{price} €</b>
                         </Descriptions.Item>
-                        {/* <Descriptions.Item label="Usage Time" span={2}>
-                            2019-04-24 18:00:00
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Status" span={3}>
-                            <Badge status="processing" text="Running" />
-                        </Descriptions.Item>
-                        <Descriptions.Item label="Negotiated Amount">$80.00</Descriptions.Item>
-                        <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-                        <Descriptions.Item label="Official Receipts">$60.00</Descriptions.Item>
-                        <Descriptions.Item label="Config Info"> */}
-                        {/* Data disk type: MongoDB
-                            <br />
-                            Database version: 3.4
-                            <br />
-                            Package: dds.mongo.mid
-                            <br />
-                            Storage space: 10 GB
-                            <br />
-                            Replication factor: 3
-                            <br />
-                            Region: East China 1<br /> */}
-                        {/* </Descriptions.Item> */}
                     </Descriptions>
+                    <div>rating</div>
                     <Card
                         actions={[
                             <>
@@ -154,16 +138,30 @@ const ProductDetails = ({ match }) => {
                                 <br />
                                 Add to Wishlist
                             </Link>,
+                            <RatingModal>
+                                <StarRatings
+                                    name={_id}
+                                    starRatedColor="rgb(24, 144, 255)"
+                                    starHoverColor="rgb(24, 144, 255)"
+                                    changeRating={(newRating, name) => console.log('new Rating', newRating, "name ", name)}
+                                    starDimension="22px"
+                                    starSpacing="4px"
+                                />
+                            </RatingModal>
                         ]}
                     >
                         <Skeleton loading={loading}>
-                            {/* <Meta
-                            // title={title}
-                            // description={description}
+                            <Meta
+                                style={{ display: "flex", justifyContent: "center" }}
+                                description={
+                                    <div className="custom-meta">
 
-                            /> */}
+                                    </div>
+                                }
+                            />
                         </Skeleton>
                     </Card>
+
                 </div>
             </div>
             {/* Product image and details  END*/}

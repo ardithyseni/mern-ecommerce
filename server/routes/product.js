@@ -10,6 +10,7 @@ import {
     removeProduct,
     listProductsByFilter,
     countProducts,
+    rateProduct,
 } from "../controllers/product.js";
 
 // middlewares
@@ -24,6 +25,8 @@ router.delete("/product/:slug", authCheck, adminCheck, removeProduct);
 router.get("/product/:slug", getProductBySlug);
 router.put("/product/:slug", authCheck, adminCheck, updateProduct);
 
-router.post("/products", listProductsByFilter)
+router.post("/products", listProductsByFilter);
+// rating system
+router.put("/product/rate/:productId", authCheck, rateProduct);
 
 export default router;

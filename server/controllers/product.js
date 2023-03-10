@@ -1,5 +1,6 @@
 import Product from "../models/product.js";
 import slugify from "slugify";
+import User from "../models/user.js";
 
 export const createProduct = async (req, res) => {
     try {
@@ -121,16 +122,50 @@ export const listProductsByFilter = async (req, res) => {
             .exec();
 
         res.json(productsToFilter);
-
     } catch (error) {
         console.log(error);
     }
 };
 
 export const countProducts = async (req, res) => {
-    let total = await Product.find({})
-        .estimatedDocumentCount()
-        .exec();
+    let total = await Product.find({}).estimatedDocumentCount().exec();
 
     res.json(total);
+};
+
+export const rateProduct = async (req, res) => {
+    const product = await Product.findById(req.params.productId).exec();
+    const user = await User.findOne({ email: req.user.email }).exec();
+    const { star } = req.body;
+
+    // who is updating ?
+    // check if currently logged in user has already added a rating to this product
+
+    let existingRatingObject = product.ratings.find(
+        (element) => element.postedBy == user._id
+    );
+    // if user has not left a rating, push it to the ratings array
+    if (existingRatingObject === undefined) {
+        let ratingAdded = await Product.findByIdAndUpdate(
+            product._id,
+            {
+                $push: { ratings: { star: star, postedBy: user._id } },
+            },
+            { new: true }
+        ).exec();
+        console.log("ratingAdded", ratingAdded);
+        res.json(ratingAdded);
+    } else {
+        // if user has already left rating,  update it
+        // find the particular rating that we want to update
+        const ratingUpdated = await Product.updateOne(
+            {
+                ratings: { $elemMatch: existingRatingObject },
+            },
+            { $set: { "ratings.$.star": star } },
+            { new: true }
+        ).exec();
+        console.log("rating updated ", ratingUpdated);
+        res.json(ratingUpdated);
+    }
 };
