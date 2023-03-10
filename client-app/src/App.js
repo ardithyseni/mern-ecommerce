@@ -90,7 +90,7 @@ const App = () => {
         <AdminRoute exact path="/admin/product" component={ProductCreate} />
         <AdminRoute exact path="/admin/product/:slug" component={ProductUpdate} />
         <AdminRoute exact path="/admin/products" component={AllProducts} />
-        <AdminRoute exact path="/product/:slug" component={ProductDetails} />
+        <Route exact path="/product/:slug" component={ProductDetails} />
       </Switch>
     </>
   );
