@@ -47,7 +47,7 @@ const RatingModal = ({ children }) => {
                     type="button"
                 />
                 <br />
-                {user ? "Rate this product" : "Login to rate this product"}
+                {user ? "Rate this product" : "Log in to rate this product"}
             </div>
             <Modal
                 title="Leave your rating"

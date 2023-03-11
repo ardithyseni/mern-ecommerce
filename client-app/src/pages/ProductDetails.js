@@ -44,7 +44,7 @@ const ProductDetails = ({ match }) => {
             );
             existingRatingObject && setStar(existingRatingObject.star) // current user's star
         }
-    })
+    }, [product, user])
 
     const loadProduct = () => {
         setLoading(true);
