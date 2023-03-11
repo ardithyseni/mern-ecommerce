@@ -56,6 +56,7 @@ const RatingModal = ({ children }) => {
                 onOk={() => {
                     setIsModalOpen(false);
                     toast.success("Thank you for your feedback");
+                    
                 }}
                 onCancel={() => setIsModalOpen(false)}
             >

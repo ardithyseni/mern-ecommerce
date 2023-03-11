@@ -12,7 +12,7 @@ import RatingModal from "../components/modal/RatingModal";
 const { Meta } = Card;
 
 const ProductDetails = ({ match }) => {
-    const [product, setProduct] = useState();
+    const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
     const [star, setStar] = useState(0);
 
@@ -36,6 +36,15 @@ const ProductDetails = ({ match }) => {
     useEffect(() => {
         loadProduct();
     }, [slug]);
+
+    useEffect(() => {
+        if (product.ratings && user) {
+            let existingRatingObject = product.ratings.find(
+                (element) => element.postedBy.toString() === user._id.toString()
+            );
+            existingRatingObject && setStar(existingRatingObject.star) // current user's star
+        }
+    })
 
     const loadProduct = () => {
         setLoading(true);
