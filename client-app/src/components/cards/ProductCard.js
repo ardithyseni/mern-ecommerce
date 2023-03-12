@@ -2,9 +2,10 @@ import React from "react";
 import { Skeleton, Card, Button, Popconfirm } from "antd";
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from 'react-router-dom';
+import { showAverage } from "../../functions/rating";
 const { Meta } = Card;
 
-const ProductCard = ({product, loading}) => {
+const ProductCard = ({ product, loading }) => {
     const { title, description, images, slug } = product;
     return (
         <Link to={`/product/${slug}`}>
@@ -41,16 +42,23 @@ const ProductCard = ({product, loading}) => {
                         // onCancel={cancel}
                         okText="Yes"
                         cancelText="No">
-                        <ShoppingCartOutlined style={{ fontSize: '23px' }}  type="button" key="cart" />,
+                        <ShoppingCartOutlined style={{ fontSize: '23px' }} type="button" key="cart" />,
                     </Popconfirm>,
                 ]}
             >
-            <Skeleton loading={loading}>
+                <Skeleton loading={loading}>
 
-                <Meta
-                    title={title}
-                    description={`${description && description.substring(0, 50)}...`}
-                />
+                    <Meta
+                        title={title}
+                        description={<div>
+                            {description && description.substring(0, 60) + "..."}
+                            <br />
+                            <br />
+                            {product && product.ratings &&
+                                product.ratings.length > 0 ? showAverage(product) : "No rating yet"}
+                        </div>
+                        }
+                    />
                 </Skeleton>
             </Card>
         </Link>

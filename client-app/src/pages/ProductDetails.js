@@ -8,6 +8,8 @@ import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
 import RatingModal from "../components/modal/RatingModal";
+import { showAverage } from "../functions/rating";
+
 
 const { Meta } = Card;
 
@@ -62,11 +64,11 @@ const ProductDetails = ({ match }) => {
         setStar(newRating);
         console.table('newRating: ', newRating, name);
         console.table('star: ', star, name);
-         rateProductFunction(name, newRating, user.token)
-        .then((res) => {
-            console.log('rating clicked', res.data);
-            // loadProduct(); // to show updated rating in real time
-        });
+        rateProductFunction(name, newRating, user.token)
+            .then((res) => {
+                console.log('rating clicked', res.data);
+                // loadProduct(); // to show updated rating in real time
+            });
     };
 
     return (
@@ -109,10 +111,6 @@ const ProductDetails = ({ match }) => {
                         <li className="list-group-item">Vestibulum at eros</li>
                     </ul> */}
                     <Descriptions title={title} bordered>
-                        <Descriptions.Item span={3} label="Order time">
-                            2018-04-24 18:00:00
-                        </Descriptions.Item>
-
                         <Descriptions.Item span={3} label="Category">
                             <Tag>
                                 <a href="#">{category.name}</a>
@@ -138,7 +136,7 @@ const ProductDetails = ({ match }) => {
                             <b>{price} €</b>
                         </Descriptions.Item>
                     </Descriptions>
-                    <div>rating</div>
+                    {/* <div>rating</div> */}
                     <Card
                         actions={[
                             <>
@@ -182,7 +180,10 @@ const ProductDetails = ({ match }) => {
                                     justifyContent: "center",
                                 }}
                                 description={
-                                    <div className="custom-meta"></div>
+                                    <div className="custom-meta">
+                                        {product && product.ratings && 
+                                        product.ratings.length > 0 ? showAverage(product) : "No rating yet"}
+                                    </div>
                                 }
                             />
                         </Skeleton>
