@@ -14,6 +14,7 @@ const ProductCard = ({ product, loading }) => {
                 style={{
                     width: 300,
                     boxShadow: '0px 2px 6px rgba(0, 0, 0, 0.15)',
+                    flexBasis: 'calc(33.33% - 16px)', // 3 cards per row, with 16px of gutter space between them
                 }}
                 cover={
                     <img

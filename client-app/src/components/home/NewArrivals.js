@@ -43,7 +43,7 @@ const NewArrivals = () => {
         ) : (
           <div className="row">
             {products.map((product) => (
-              <div className="col-md-4" key={product._id}>
+              <div className="col-md-4 d-flex flex-wrap " key={product._id}>
                 <ProductCard product={product} loading={loading} />
               </div>
             ))}

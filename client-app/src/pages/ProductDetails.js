@@ -9,6 +9,7 @@ import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
 import RatingModal from "../components/modal/RatingModal";
 import { showAverage } from "../functions/rating";
+import ProductCard from "../components/cards/ProductCard";
 
 
 const { Meta } = Card;
@@ -185,8 +186,8 @@ const ProductDetails = ({ match }) => {
                                 }}
                                 description={
                                     <div className="custom-meta">
-                                        {product && product.ratings && 
-                                        product.ratings.length > 0 ? showAverage(product) : "No rating yet"}
+                                        {product && product.ratings &&
+                                            product.ratings.length > 0 ? showAverage(product) : "No rating yet"}
                                     </div>
                                 }
                             />
@@ -199,9 +200,20 @@ const ProductDetails = ({ match }) => {
                 <div className="col text-center pt-5 pb-5">
                     <hr />
                     <h4>Related Products</h4>
-                    {JSON.stringify(relatedProducts)}
+                    {/* {JSON.stringify(relatedProducts)} */}
                     <hr />
                 </div>
+            </div>
+
+            <div className="row pb-5">
+                {relatedProducts.length > 0 ?
+                    relatedProducts.map((r) =>
+                        <div className="col-md-3" key={r._id}>
+                            <ProductCard product={r} />
+                        </div>) :
+                    <div className="text-center col">
+                        No related products found.
+                    </div>}
             </div>
         </div>
     );
