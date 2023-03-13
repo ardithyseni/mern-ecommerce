@@ -183,11 +183,15 @@ export const getRelatedProducts = async (req, res) => {
         _id: { $ne: product._id },
         category: product.category,
     })
-    .limit(3)
-    .populate("category")
-    .populate("subcategories")
-    .populate("postedBy")
-    .exec();
+        .limit(3)
+        .populate("category")
+        .populate("subcategories")
+        .populate({
+            path: "ratings.postedBy",
+            model: "User",
+            options: { strictPopulate: false },
+        })
+        .exec();
 
     res.json(related);
 };
