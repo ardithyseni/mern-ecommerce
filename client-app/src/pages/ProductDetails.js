@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProductBySlug, rateProductFunction } from "../functions/product";
+import { getProductBySlug, rateProductFunction, getRelated } from "../functions/product";
 import { useSelector } from "react-redux";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
@@ -17,6 +17,7 @@ const ProductDetails = ({ match }) => {
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
     const [star, setStar] = useState(0);
+    const [relatedProducts, setRelatedProducts] = useState([]);
 
     const { user } = useSelector((state) => ({ ...state }));
 
@@ -52,6 +53,9 @@ const ProductDetails = ({ match }) => {
         setLoading(true);
         getProductBySlug(slug).then((res) => {
             setProduct(res.data);
+            // load related products also
+            getRelated(res.data._id).then((res) => setRelatedProducts(res.data));
+
             setLoading(false);
         });
     };
@@ -195,6 +199,7 @@ const ProductDetails = ({ match }) => {
                 <div className="col text-center pt-5 pb-5">
                     <hr />
                     <h4>Related Products</h4>
+                    {JSON.stringify(relatedProducts)}
                     <hr />
                 </div>
             </div>

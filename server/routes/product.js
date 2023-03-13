@@ -11,6 +11,7 @@ import {
     listProductsByFilter,
     countProducts,
     rateProduct,
+    getRelatedProducts,
 } from "../controllers/product.js";
 
 // middlewares
@@ -28,5 +29,8 @@ router.put("/product/:slug", authCheck, adminCheck, updateProduct);
 router.post("/products", listProductsByFilter);
 // rating system
 router.put("/product/rate/:productId", authCheck, rateProduct);
+
+// related products
+router.get("/product/related/:productId", getRelatedProducts)
 
 export default router;

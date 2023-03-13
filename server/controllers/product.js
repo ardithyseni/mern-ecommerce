@@ -137,9 +137,9 @@ export const rateProduct = async (req, res) => {
     const product = await Product.findById(req.params.productId).exec();
     const user = await User.findOne({ email: req.user.email }).exec();
     const { star } = req.body;
-    console.log('|||||||||||||||||||');
+    console.log("|||||||||||||||||||");
     console.log(star);
-    console.log('|||||||||||||||||||');
+    console.log("|||||||||||||||||||");
     // who is updating ?
     // check if currently logged in user has already added a rating to this product
 
@@ -156,10 +156,13 @@ export const rateProduct = async (req, res) => {
             },
             { new: true }
         ).exec();
-        console.log("ratingAdded", ratingAdded, "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        console.log(
+            "ratingAdded",
+            ratingAdded,
+            "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+        );
         res.json(ratingAdded);
-    }
-    else {
+    } else {
         // if user has already left rating, update it
         const ratingUpdated = await Product.updateOne(
             {
@@ -171,4 +174,20 @@ export const rateProduct = async (req, res) => {
         console.log("ratingUpdated", ratingUpdated);
         res.json(ratingUpdated);
     }
+};
+
+export const getRelatedProducts = async (req, res) => {
+    const product = await Product.findById(req.params.productId).exec();
+
+    const related = await Product.find({
+        _id: { $ne: product._id },
+        category: product.category,
+    })
+    .limit(3)
+    .populate("category")
+    .populate("subcategories")
+    .populate("postedBy")
+    .exec();
+
+    res.json(related);
 };
