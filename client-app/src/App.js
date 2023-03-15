@@ -26,6 +26,7 @@ import ProductCreate from './pages/admin/product/ProductCreate';
 import AllProducts from './pages/admin/product/AllProducts';
 import ProductUpdate from './pages/admin/product/ProductUpdate';
 import ProductDetails from './pages/ProductDetails';
+import CategoryHome from './pages/category/CategoryHome';
 
 const App = () => {
 
@@ -79,9 +80,11 @@ const App = () => {
         <Route exact path="/register" component={Register} />
         <Route exact path="/register/complete" component={RegisterComplete} />
         <Route exact path="/passwordreset" component={ForgotPassword} />
+
         <UserRoute exact path="/user/history" component={UserHistory} />
         <UserRoute exact path="/user/password" component={UserPassword} />
         <UserRoute exact path="/user/wishlist" component={UserWishlist} />
+
         <AdminRoute exact path="/admin/dashboard" component={AdminDashboard} />
         <AdminRoute exact path="/admin/category" component={CategoryCreate} />
         <AdminRoute exact path="/admin/subcategory" component={CreateSubcategory} />
@@ -90,7 +93,9 @@ const App = () => {
         <AdminRoute exact path="/admin/product" component={ProductCreate} />
         <AdminRoute exact path="/admin/product/:slug" component={ProductUpdate} />
         <AdminRoute exact path="/admin/products" component={AllProducts} />
+        
         <Route exact path="/product/:slug" component={ProductDetails} />
+        <Route exact path="/category/:slug" component={CategoryHome} />
       </Switch>
     </>
   );
