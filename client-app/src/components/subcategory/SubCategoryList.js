@@ -19,7 +19,7 @@ const SubCategoryList = () => {
 
     const showSubcategories = () =>
         subcategories.map((s) => (
-            <Link key={s._id} to={`/category/${s.slug}`} className="col btn btn-outlined btn-light btn-lg btn-raised m-3">
+            <Link key={s._id} to={`/subcategory/${s.slug}`} className="col btn btn-outlined btn-light btn-lg btn-raised m-3">
                 <div>
                     {s.name}
                 </div>

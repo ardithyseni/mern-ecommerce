@@ -125,7 +125,7 @@ const ProductDetails = ({ match }) => {
                         <Descriptions.Item span={3} label="Subcategories">
                             {subcategories.map((s) => (
                                 <Tag key={s._id}>
-                                    <a href="#">{s.name}</a>
+                                <Link to={`/subcategory/${s.slug}`}>{s.name}</Link>
                                 </Tag>
                             ))}
                         </Descriptions.Item>

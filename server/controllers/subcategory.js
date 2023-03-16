@@ -24,11 +24,11 @@ export const listSubcategories = async (req, res) => {
 
 export const readSubcategory = async (req, res) => {
     let subcategory = await Subcategory.findOne({ slug: req.params.slug }).exec();
-    const products = await Product.find({subcategories: subcategory})
-    .populate('category')
-    .exec();
+    const products = await Product.find({ subcategories: subcategory })
+        .populate('category')
+        .exec();
 
-    res.json({subcategory, products});
+    res.json({ subcategory, products });
 }
 
 
@@ -56,13 +56,13 @@ export const updateSubcategory = async (req, res) => {
             },
             {
                 name: name,
-                parent: parent, 
+                parent: parent,
                 slug: slugify(name)
-            }, 
+            },
             {
-                new: true 
+                new: true
             });
-            res.json(updatedSubcategory)
+        res.json(updatedSubcategory)
     } catch (error) {
         res.status(400).send('Update subcategory failed');
         console.log(error);

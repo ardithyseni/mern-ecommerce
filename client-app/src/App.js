@@ -27,6 +27,7 @@ import AllProducts from './pages/admin/product/AllProducts';
 import ProductUpdate from './pages/admin/product/ProductUpdate';
 import ProductDetails from './pages/ProductDetails';
 import CategoryHome from './pages/category/CategoryHome';
+import SubCategoryHome from './pages/subcategory/SubCategoryHome';
 
 const App = () => {
 
@@ -96,6 +97,7 @@ const App = () => {
         
         <Route exact path="/product/:slug" component={ProductDetails} />
         <Route exact path="/category/:slug" component={CategoryHome} />
+        <Route exact path="/subcategory/:slug" component={SubCategoryHome} />
       </Switch>
     </>
   );
