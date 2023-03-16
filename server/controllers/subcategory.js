@@ -1,4 +1,5 @@
 import Subcategory from '../models/subcategory.js';
+import Product from '../models/product.js';
 import slugify from 'slugify';
 
 export const createSubcategory = async (req, res) => {
@@ -23,7 +24,11 @@ export const listSubcategories = async (req, res) => {
 
 export const readSubcategory = async (req, res) => {
     let subcategory = await Subcategory.findOne({ slug: req.params.slug }).exec();
-    res.json(subcategory);
+    const products = await Product.find({subcategories: subcategory})
+    .populate('category')
+    .exec();
+
+    res.json({subcategory, products});
 }
 
 
