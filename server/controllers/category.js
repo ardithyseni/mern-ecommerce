@@ -1,4 +1,5 @@
 import Category from "../models/category.js";
+import Product from "../models/product.js";
 import Subcategory from "../models/subcategory.js";
 import slugify from "slugify";
 
@@ -23,7 +24,15 @@ export const listCategories = async (req, res) => {
 
 export const readCategory = async (req, res) => {
     let category = await Category.findOne({ slug: req.params.slug }).exec();
-    res.json(category);
+    // res.json(category);
+    const products = await Product.find({category: category})
+    .populate('category')
+    .exec();
+
+    res.json({
+        category,
+        products
+    });
 };
 
 export const removeCategory = async (req, res) => {

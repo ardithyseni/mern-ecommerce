@@ -18,10 +18,8 @@ const CategoryList = () => {
 
     const showCategories = () =>
         categories.map((c) => (
-            <Link to={`/category/${c.slug}`} className="col btn btn-outlined btn-light btn-lg btn-raised m-3">
-                <div key={c._id}
-                    
-                >
+            <Link key={c._id} to={`/category/${c.slug}`} className="col btn btn-outlined btn-light btn-lg btn-raised m-3">
+                <div>
                     {c.name}
                 </div>
             </Link>

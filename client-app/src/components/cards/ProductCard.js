@@ -48,7 +48,6 @@ const ProductCard = ({ product, loading }) => {
                 ]}
             >
                 <Skeleton loading={loading}>
-
                     <Meta
                         title={title}
                         description={<div>

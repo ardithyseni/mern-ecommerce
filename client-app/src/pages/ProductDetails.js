@@ -118,7 +118,8 @@ const ProductDetails = ({ match }) => {
                     <Descriptions title={title} bordered>
                         <Descriptions.Item span={3} label="Category">
                             <Tag>
-                                <a href="#">{category.name}</a>
+                                {/* <a href="#">{category.name}</a> */}
+                                <Link to={`/category/${category.slug}`}>{category.name}</Link>
                             </Tag>
                         </Descriptions.Item>
                         <Descriptions.Item span={3} label="Subcategories">
