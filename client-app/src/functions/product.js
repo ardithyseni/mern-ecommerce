@@ -8,7 +8,6 @@ export const createProduct = async (product, idtoken) => {
     });
 };
 
-
 export const getProductsByCount = async (count) => {
     return await axios.get(`${process.env.REACT_APP_API}/products/${count}`);
 };
@@ -45,11 +44,9 @@ export const getProductsByFilter = async (sort, order, pageNumber) => {
     });
 };
 
-
 export const countProducts = async () => {
     return await axios.get(`${process.env.REACT_APP_API}/products/total`);
 };
-
 
 export const rateProductFunction = async (productId, star, idtoken) => {
     return await axios.put(
@@ -57,12 +54,17 @@ export const rateProductFunction = async (productId, star, idtoken) => {
         { star },
         {
             headers: {
-                idtoken
-            }
+                idtoken,
+            },
         }
     );
-}
-
+};
 
 export const getRelated = async (productId) =>
-    await axios.get(`${process.env.REACT_APP_API}/product/related/${productId}`);
+    await axios.get(
+        `${process.env.REACT_APP_API}/product/related/${productId}`
+    );
+
+export const fetchProductsByFilter = async (arg) => {
+    return await axios.post(`${process.env.REACT_APP_API}/search/filters`, arg);
+};

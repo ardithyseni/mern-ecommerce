@@ -216,7 +216,7 @@ export const searchProduct = async (req, res) => {
     const { query } = req.body;
 
     if (query) {
-        console.log('QUERY => ', query)
+        console.log('QUERY:', query)
         await handleQuery(req, res, query);
     }
 };
