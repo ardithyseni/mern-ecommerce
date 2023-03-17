@@ -12,6 +12,7 @@ import {
     countProducts,
     rateProduct,
     getRelatedProducts,
+    searchProduct,
 } from "../controllers/product.js";
 
 // middlewares
@@ -32,5 +33,8 @@ router.put("/product/rate/:productId", authCheck, rateProduct);
 
 // related products
 router.get("/product/related/:productId", getRelatedProducts)
+
+// search & filter routes
+router.post("/search/filters", searchProduct)
 
 export default router;

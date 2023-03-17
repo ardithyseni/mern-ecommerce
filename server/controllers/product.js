@@ -195,3 +195,28 @@ export const getRelatedProducts = async (req, res) => {
 
     res.json(related);
 };
+
+// search & filter
+
+const handleQuery = async (req, res, query) => {
+    const products = await Product.find({ $text: { $search: query } })
+        .populate('category', "_id name")
+        .populate('subcategories', "_id name")
+        .populate({
+            path: "ratings.postedBy",
+            model: "User",
+            options: { strictPopulate: false },
+        })
+        .exec();
+
+    res.json(products);
+};
+
+export const searchProduct = async (req, res) => {
+    const { query } = req.body;
+
+    if (query) {
+        console.log('QUERY => ', query)
+        await handleQuery(req, res, query);
+    }
+};
