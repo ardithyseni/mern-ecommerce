@@ -1,6 +1,8 @@
 import Product from "../models/product.js";
 import slugify from "slugify";
 import User from "../models/user.js";
+import { handlePrice } from "../handlers/priceHandler.js";
+import { handleSearchQuery } from "../handlers/searchQueryHandler.js";
 
 export const createProduct = async (req, res) => {
     try {
@@ -198,25 +200,16 @@ export const getRelatedProducts = async (req, res) => {
 
 // search & filter
 
-const handleQuery = async (req, res, query) => {
-    const products = await Product.find({ $text: { $search: query } })
-        .populate('category', "_id name")
-        .populate('subcategories', "_id name")
-        .populate({
-            path: "ratings.postedBy",
-            model: "User",
-            options: { strictPopulate: false },
-        })
-        .exec();
-
-    res.json(products);
-};
-
 export const searchProduct = async (req, res) => {
-    const { query } = req.body;
+    const { query, price } = req.body;
 
     if (query) {
-        console.log('QUERY:', query)
-        await handleQuery(req, res, query);
+        console.log("QUERY:", query);
+        await handleSearchQuery(req, res, query);
+    }
+    // price [20, 270]
+    if (price !== undefined) {
+        console.log("price-->", price);
+        await handlePrice(req, res, price);
     }
 };
