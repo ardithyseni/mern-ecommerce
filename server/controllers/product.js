@@ -3,6 +3,7 @@ import slugify from "slugify";
 import User from "../models/user.js";
 import { handlePrice } from "../handlers/priceHandler.js";
 import { handleSearchQuery } from "../handlers/searchQueryHandler.js";
+import { handleCategory } from "../handlers/categoryHandler.js";
 
 export const createProduct = async (req, res) => {
     try {
@@ -201,7 +202,7 @@ export const getRelatedProducts = async (req, res) => {
 // search & filter
 
 export const searchProduct = async (req, res) => {
-    const { query, price } = req.body;
+    const { query, price, category } = req.body;
 
     if (query) {
         console.log("QUERY:", query);
@@ -212,4 +213,8 @@ export const searchProduct = async (req, res) => {
         console.log("price-->", price);
         await handlePrice(req, res, price);
     }
-};
+    if (category) {
+        console.log('category-->', category);
+        await handleCategory(req, res, category);
+    }
+}; 

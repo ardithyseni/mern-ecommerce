@@ -6,7 +6,7 @@ import { showAverage } from "../../functions/rating";
 const { Meta } = Card;
 
 const ProductCard = ({ product, loading }) => {
-    const { title, description, images, slug } = product;
+    const { title, description, images, slug, price } = product;
     return (
         <Link to={`/product/${slug}`}>
             <Card
@@ -53,6 +53,8 @@ const ProductCard = ({ product, loading }) => {
                         description={<div>
                             {description && description.substring(0, 60) + "..."}
                             <br />
+                            <br />
+                            <b>{price} €</b>
                             <br />
                             {product && product.ratings &&
                                 product.ratings.length > 0 ? showAverage(product) : "No rating yet"}

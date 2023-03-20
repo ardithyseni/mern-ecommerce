@@ -3,18 +3,21 @@ import {
     getProductsByCount,
     fetchProductsByFilter,
 } from "../functions/product";
+import { getCategories } from "../functions/category";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
-import { Spin, Card, Skeleton, Menu, Slider } from "antd";
-import { EuroOutlined } from "@ant-design/icons";
+import { Spin, Card, Skeleton, Menu, Slider, Checkbox } from "antd";
+import { EuroOutlined, UnorderedListOutlined } from "@ant-design/icons";
 
 const { SubMenu, ItemGroup } = Menu;
 
 const ShopPage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [price, setPrice] = useState([0, 0]);
+    const [price, setPrice] = useState([0, 3999]);
     const [priceChange, setPriceChange] = useState(false);
+    const [categories, setCategories] = useState([]); // to show the categories in the sidebar
+    const [categoryIds, setCategoryIds] = useState([]); // used to send to the backend
 
     let dispatch = useDispatch();
     let { search } = useSelector((state) => ({ ...state }));
@@ -22,6 +25,8 @@ const ShopPage = () => {
 
     useEffect(() => {
         loadAllProducts();
+        // fetch categories one liner
+        getCategories().then((res) => setCategories(res.data));
     }, []);
 
     // first way: load products on page load by default
@@ -49,11 +54,11 @@ const ShopPage = () => {
         setLoading(false);
     };
 
-    // 3. load products based on price range 
+    // 3. load products based on price range
     useEffect(() => {
-        console.log("ok price change")
+        console.log("ok price change");
         fetchProducts({ price });
-    }, [priceChange])
+    }, [priceChange]);
 
     const handlePriceSlider = (value) => {
         // dispatch({
@@ -63,9 +68,40 @@ const ShopPage = () => {
 
         setPrice(value);
         setTimeout(() => {
-            setPriceChange(!priceChange)
+            setPriceChange(!priceChange);
         }, 800);
-    }
+    };
+
+    // load products based on category
+    // show categories in a checkbox list
+    const showCategories = () =>
+        categories.map((c) => (
+            <div key={c._id}>
+                <Checkbox
+                    className="pb-2 pl-4 pr-4"
+                    onChange={handleCheckbox}
+                    value={c._id}
+                    name="category"
+                >
+                    {c.name}
+                </Checkbox>
+                <br />
+            </div>
+        ));
+
+    const handleCheckbox = (e) => {
+        let intheState = [...categoryIds];
+        let justChecked = e.target.value;
+        let foundInTheState = intheState.indexOf(justChecked); // index or if not found -1
+
+        if (foundInTheState === -1) {
+            intheState.push(justChecked);
+        } else {
+            intheState.splice(foundInTheState, 1);
+        }
+        setCategoryIds(intheState);
+        console.log(intheState);
+    };
 
     return (
         <div className="container-fluid">
@@ -94,10 +130,21 @@ const ShopPage = () => {
                                 />
                             </div>
                         </SubMenu>
+
+                        <SubMenu
+                            key="2"
+                            title={
+                                <span className="h6">
+                                    <UnorderedListOutlined /> Categories
+                                </span>
+                            }
+                        >
+                            <div>{showCategories()}</div>
+                        </SubMenu>
                     </Menu>
                 </div>
                 <div className="col-md-9 pt-2">
-                            <h4>Products</h4>
+                    <h4>Products</h4>
                     {loading ? (
                         // Render the Card with the Skeleton 12 times
                         <div className="row py-3">
