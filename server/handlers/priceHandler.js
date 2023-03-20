@@ -1,3 +1,6 @@
+import Product from '../models/product.js';
+
+
 export const handlePrice = async (req, res, price) => {
     try {
         let products = await Product.find({
