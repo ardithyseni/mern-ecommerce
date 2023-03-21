@@ -7,7 +7,8 @@ import { handleCategory } from "../handlers/categoryHandler.js";
 import { handleRating } from "../handlers/ratingHandler.js";
 import { handleSubcategory } from "../handlers/subcategoryHandler.js";
 import { handleShipping } from "../handlers/shippingHandler.js";
-
+import { handleBrand } from "../handlers/brandHandler.js";
+import { handleColor } from "../handlers/colorHandler.js";
 
 export const createProduct = async (req, res) => {
     try {
@@ -32,6 +33,16 @@ export const listProducts = async (req, res) => {
     // .exec();
     res.json(products);
 };
+
+export const listBrands = async (req, res) => {
+    try {
+      const brands = await Product.distinct('brand');
+      res.status(200).json(brands);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'List Brands Server Error' });
+    }
+  };
 
 export const listProductsByCount = async (req, res) => {
     let products = await Product.find({})
@@ -206,7 +217,7 @@ export const getRelatedProducts = async (req, res) => {
 // search & filter
 
 export const searchProduct = async (req, res) => {
-    const { query, price, category, stars, subcategory, shipping } = req.body;
+    const { query, price, category, stars, subcategory, brand, shipping, color } = req.body;
     const promises = [];
     if (query) {
         console.log("QUERY:", query);

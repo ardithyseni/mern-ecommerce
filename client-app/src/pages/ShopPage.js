@@ -2,12 +2,23 @@ import React, { useEffect, useState } from "react";
 import {
     getProductsByCount,
     fetchProductsByFilter,
+    fetchProductBrands,
 } from "../functions/product";
 import { getCategories } from "../functions/category";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import ProductCard from "../components/cards/ProductCard";
-import { Spin, Card, Skeleton, Menu, Slider, Checkbox, Tag } from "antd";
+import {
+    Spin,
+    Card,
+    Skeleton,
+    Menu,
+    Slider,
+    Checkbox,
+    Tag,
+    Radio,
+    Space,
+} from "antd";
 import {
     EuroOutlined,
     UnorderedListOutlined,
@@ -15,7 +26,7 @@ import {
 } from "@ant-design/icons";
 import StarFilter from "../components/forms/StarFilter";
 import StarRatings from "react-star-ratings";
-import { getSubcategories } from '../functions/subcategory';
+import { getSubcategories } from "../functions/subcategory";
 
 const { SubMenu, ItemGroup } = Menu;
 
@@ -29,6 +40,9 @@ const ShopPage = () => {
     const [star, setStar] = useState(0);
     const [subcategories, setSubcategories] = useState([]);
     const [subcategory, setSubcategory] = useState("");
+    const [brands, setBrands] = useState([]);
+    const [brand, setBrand] = useState("");
+    const [color, setColor] = useState([]);
 
     let dispatch = useDispatch();
     let { search } = useSelector((state) => ({ ...state }));
@@ -40,6 +54,8 @@ const ShopPage = () => {
         getCategories().then((res) => setCategories(res.data));
         // fetch subcategories
         getSubcategories().then((res) => setSubcategories(res.data));
+        // fetch brands
+        fetchProductBrands().then((res) => setBrands(res.data));
     }, []);
 
     // first way: load products on page load by default
@@ -133,7 +149,7 @@ const ShopPage = () => {
             loadAllProducts();
         }
         setStar(newRating);
-        fetchProducts({ stars: newRating })
+        fetchProducts({ stars: newRating });
     };
 
     const showStarRating = () => (
@@ -150,21 +166,42 @@ const ShopPage = () => {
         </div>
     );
 
-
-
     const showSubcategories = () => {
-        return (subcategories.map((s) => 
-        <Tag color="blue" onClick={() => handleClickSubcategory(s)} style={{ margin: '5px', cursor: 'pointer' }} key={s._id}>
-            {s.name}
-        </Tag>))
-    }
+        return subcategories.map((s) => (
+            <Tag
+                color="blue"
+                onClick={() => handleClickSubcategory(s)}
+                style={{ margin: "5px", cursor: "pointer" }}
+                key={s._id}
+            >
+                {s.name}
+            </Tag>
+        ));
+    };
 
     const handleClickSubcategory = (s) => {
         // console.log('sub clicked', s.name);
-        setSubcategory(s)
+        setSubcategory(s);
         setCategoryIds([]);
-        fetchProducts({ subcategory: s})
-    }
+        fetchProducts({ subcategory: s });
+    };
+
+    const showBrands = () => {
+        return (
+            <Radio.Group onChange={handleBrandChange} value={brand}>
+                {brands.map((b) => (
+                    <Radio key={b} value={b}>{b}</Radio>
+                ))}
+            </Radio.Group>
+        );
+    };
+
+    const handleBrandChange = (e) => {
+        // e.preventDefault();
+        setBrand(e.target.value);
+        console.log(e.target.value);
+        fetchProducts({ brand: e.target.value });
+    };
 
     return (
         <div className="container-fluid">
@@ -173,7 +210,10 @@ const ShopPage = () => {
                     {/* Search & Filter Menu */}
                     <h4>Search / Filter</h4>
                     <hr />
-                    <Menu defaultOpenKeys={["1", "2", "3", "4", "5", "6"]} mode="inline">
+                    <Menu
+                        defaultOpenKeys={["1", "2", "3", "4", "5", "6"]}
+                        mode="inline"
+                    >
                         <SubMenu
                             key="1"
                             title={
@@ -224,7 +264,18 @@ const ShopPage = () => {
                                 </span>
                             }
                         >
-                            <div>{showSubcategories()}</div>
+                            <div className="pl-4">{showSubcategories()}</div>
+                        </SubMenu>
+
+                        <SubMenu
+                            key="5"
+                            title={
+                                <span className="h6">
+                                    <UnorderedListOutlined /> Brands
+                                </span>
+                            }
+                        >
+                            <div className="pl-4">{showBrands()}</div>
                         </SubMenu>
                     </Menu>
                 </div>
