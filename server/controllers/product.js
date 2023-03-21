@@ -5,7 +5,7 @@ import { handlePrice } from "../handlers/priceHandler.js";
 import { handleSearchQuery } from "../handlers/searchQueryHandler.js";
 import { handleCategory } from "../handlers/categoryHandler.js";
 import { handleRating } from "../handlers/ratingHandler.js";
-
+import { handleSubcategory } from "../handlers/subcategoryHandler.js";
 
 export const createProduct = async (req, res) => {
     try {
@@ -204,7 +204,7 @@ export const getRelatedProducts = async (req, res) => {
 // search & filter
 
 export const searchProduct = async (req, res) => {
-    const { query, price, category, stars } = req.body;
+    const { query, price, category, stars, subcategory } = req.body;
 
     if (query) {
         console.log("QUERY:", query);
@@ -222,5 +222,9 @@ export const searchProduct = async (req, res) => {
     if (stars) {
         console.log('stars-->', stars);
         handleRating(req, res, stars);
+    }
+    if (subcategory) {
+        console.log('subcategory-->', subcategory);
+        await handleSubcategory(req, res, subcategory);
     }
 }; 

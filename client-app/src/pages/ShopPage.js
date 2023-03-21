@@ -5,8 +5,9 @@ import {
 } from "../functions/product";
 import { getCategories } from "../functions/category";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import ProductCard from "../components/cards/ProductCard";
-import { Spin, Card, Skeleton, Menu, Slider, Checkbox } from "antd";
+import { Spin, Card, Skeleton, Menu, Slider, Checkbox, Tag } from "antd";
 import {
     EuroOutlined,
     UnorderedListOutlined,
@@ -14,6 +15,7 @@ import {
 } from "@ant-design/icons";
 import StarFilter from "../components/forms/StarFilter";
 import StarRatings from "react-star-ratings";
+import { getSubcategories } from '../functions/subcategory';
 
 const { SubMenu, ItemGroup } = Menu;
 
@@ -25,6 +27,8 @@ const ShopPage = () => {
     const [categories, setCategories] = useState([]); // to show the categories in the sidebar
     const [categoryIds, setCategoryIds] = useState([]); // used to send to the backend
     const [star, setStar] = useState(0);
+    const [subcategories, setSubcategories] = useState([]);
+    const [subcategory, setSubcategory] = useState("");
 
     let dispatch = useDispatch();
     let { search } = useSelector((state) => ({ ...state }));
@@ -34,6 +38,8 @@ const ShopPage = () => {
         loadAllProducts();
         // fetch categories one liner
         getCategories().then((res) => setCategories(res.data));
+        // fetch subcategories
+        getSubcategories().then((res) => setSubcategories(res.data));
     }, []);
 
     // first way: load products on page load by default
@@ -123,6 +129,9 @@ const ShopPage = () => {
     // show products by average star rating
 
     const handleStarClick = (newRating, name) => {
+        if (newRating === 0) {
+            loadAllProducts();
+        }
         setStar(newRating);
         fetchProducts({ stars: newRating })
     };
@@ -141,6 +150,21 @@ const ShopPage = () => {
         </div>
     );
 
+
+
+    const showSubcategories = () => {
+        return (subcategories.map((s) => 
+        <Tag color="blue" onClick={() => handleClickSubcategory(s)} style={{ margin: '5px', cursor: 'pointer' }} key={s._id}>
+            {s.name}
+        </Tag>))
+    }
+
+    const handleClickSubcategory = (s) => {
+        // console.log('sub clicked', s.name);
+        setSubcategory(s)
+        fetchProducts({ subcategory: s})
+    }
+
     return (
         <div className="container-fluid">
             <div className="row">
@@ -148,7 +172,7 @@ const ShopPage = () => {
                     {/* Search & Filter Menu */}
                     <h4>Search / Filter</h4>
                     <hr />
-                    <Menu defaultOpenKeys={["1", "2", "3"]} mode="inline">
+                    <Menu defaultOpenKeys={["1", "2", "3", "4", "5", "6"]} mode="inline">
                         <SubMenu
                             key="1"
                             title={
@@ -189,6 +213,17 @@ const ShopPage = () => {
                             }
                         >
                             <div>{showStarRating()}</div>
+                        </SubMenu>
+
+                        <SubMenu
+                            key="4"
+                            title={
+                                <span className="h6">
+                                    <StarOutlined /> Subcategories
+                                </span>
+                            }
+                        >
+                            <div>{showSubcategories()}</div>
                         </SubMenu>
                     </Menu>
                 </div>
