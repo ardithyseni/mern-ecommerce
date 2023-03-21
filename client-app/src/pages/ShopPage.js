@@ -189,9 +189,12 @@ const ShopPage = () => {
     const showBrands = () => {
         return (
             <Radio.Group onChange={handleBrandChange} value={brand}>
-                {brands.map((b) => (
-                    <Radio key={b} value={b}>{b}</Radio>
-                ))}
+                <Space direction="vertical">
+
+                    {brands.map((b) => (
+                        <Radio className="pl-4" key={b} value={b}>{b}</Radio>
+                    ))}
+                </Space>
             </Radio.Group>
         );
     };
@@ -211,7 +214,7 @@ const ShopPage = () => {
                     <h4>Search / Filter</h4>
                     <hr />
                     <Menu
-                        defaultOpenKeys={["1", "2", "3", "4", "5", "6"]}
+                        defaultOpenKeys={["1", "2", "3", "4", "5"]}
                         mode="inline"
                     >
                         <SubMenu
