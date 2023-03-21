@@ -6,6 +6,8 @@ import { handleSearchQuery } from "../handlers/searchQueryHandler.js";
 import { handleCategory } from "../handlers/categoryHandler.js";
 import { handleRating } from "../handlers/ratingHandler.js";
 import { handleSubcategory } from "../handlers/subcategoryHandler.js";
+import { handleShipping } from "../handlers/shippingHandler.js";
+
 
 export const createProduct = async (req, res) => {
     try {
@@ -204,20 +206,20 @@ export const getRelatedProducts = async (req, res) => {
 // search & filter
 
 export const searchProduct = async (req, res) => {
-    const { query, price, category, stars, subcategory } = req.body;
-
+    const { query, price, category, stars, subcategory, shipping } = req.body;
+    const promises = [];
     if (query) {
         console.log("QUERY:", query);
-        await handleSearchQuery(req, res, query);
+        promises.push(handleSearchQuery(req, res, query));
     }
     // price [20, 270]
     if (price !== undefined) {
         console.log("price-->", price);
-        await handlePrice(req, res, price);
+        promises.push(handlePrice(req, res, price));
     }
     if (category) {
         console.log('category-->', category);
-        await handleCategory(req, res, category);
+        promises.push(handleCategory(req, res, category));
     }
     if (stars) {
         console.log('stars-->', stars);
@@ -225,6 +227,20 @@ export const searchProduct = async (req, res) => {
     }
     if (subcategory) {
         console.log('subcategory-->', subcategory);
-        await handleSubcategory(req, res, subcategory);
+        promises.push(handleSubcategory(req, res, subcategory));
     }
+    if (shipping) {
+        console.log("shipping->", shipping);
+        promises.push(handleShipping(req, res, shipping));
+    }
+    if (brand) {
+        console.log("brand-->", brand)
+        promises.push(handleBrand(req, res, brand));
+    }
+    if (color) {
+        console.log("color-->", color);
+        promises.push(handleColor(req, res, color));
+    }
+
+    await Promise.all(promises);
 }; 

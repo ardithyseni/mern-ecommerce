@@ -162,6 +162,7 @@ const ShopPage = () => {
     const handleClickSubcategory = (s) => {
         // console.log('sub clicked', s.name);
         setSubcategory(s)
+        setCategoryIds([]);
         fetchProducts({ subcategory: s})
     }
 
@@ -219,7 +220,7 @@ const ShopPage = () => {
                             key="4"
                             title={
                                 <span className="h6">
-                                    <StarOutlined /> Subcategories
+                                    <UnorderedListOutlined /> Subcategories
                                 </span>
                             }
                         >
