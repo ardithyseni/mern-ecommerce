@@ -82,6 +82,7 @@ const ShopPage = () => {
                     onChange={handleCheckbox}
                     value={c._id}
                     name="category"
+                    checked={categoryIds.includes(c._id)}
                 >
                     {c.name}
                 </Checkbox>
@@ -99,8 +100,19 @@ const ShopPage = () => {
         } else {
             intheState.splice(foundInTheState, 1);
         }
+
         setCategoryIds(intheState);
-        console.log(intheState);
+        // console.log(intheState);
+
+        if(intheState.length === 0) {
+            loadAllProducts();
+        } else {
+            setLoading(true);
+            fetchProducts({ category: intheState });
+            setLoading(false);
+        }
+
+
     };
 
     return (
