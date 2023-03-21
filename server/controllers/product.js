@@ -4,6 +4,8 @@ import User from "../models/user.js";
 import { handlePrice } from "../handlers/priceHandler.js";
 import { handleSearchQuery } from "../handlers/searchQueryHandler.js";
 import { handleCategory } from "../handlers/categoryHandler.js";
+import { handleRating } from "../handlers/ratingHandler.js";
+
 
 export const createProduct = async (req, res) => {
     try {
@@ -202,7 +204,7 @@ export const getRelatedProducts = async (req, res) => {
 // search & filter
 
 export const searchProduct = async (req, res) => {
-    const { query, price, category } = req.body;
+    const { query, price, category, stars } = req.body;
 
     if (query) {
         console.log("QUERY:", query);
@@ -216,5 +218,9 @@ export const searchProduct = async (req, res) => {
     if (category) {
         console.log('category-->', category);
         await handleCategory(req, res, category);
+    }
+    if (stars) {
+        console.log('stars-->', stars);
+        handleRating(req, res, stars);
     }
 }; 
