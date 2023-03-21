@@ -24,7 +24,7 @@ export const handleRating = (req, res, stars) => {
                     options: { strictPopulate: false },
                 })
                 .exec((error, products) => {
-                    if (err) console.log("Product aggregate error", error);
+                    if (error) console.log("Product aggregate error", error);
                     res.json(products);
                 });
         });

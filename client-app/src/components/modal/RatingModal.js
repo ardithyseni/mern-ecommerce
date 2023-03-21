@@ -12,19 +12,6 @@ const RatingModal = ({ children }) => {
     const history = useHistory();
     const params = useParams();
 
-    // console.log('params', params);
-
-    // const handleModal = () => {
-    //     if (user && user.token) {
-    //         setIsModalOpen(true)
-    //     } else {
-    //         history.push({
-    //             pathname: '/login',
-    //             state: { from: `/product/${params.slug}` }
-    //         });
-    //     }
-    // }
-    
     // with local storage
     const handleModal = () => {
         if (user && user.token) {

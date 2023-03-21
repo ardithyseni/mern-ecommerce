@@ -7,7 +7,13 @@ import { getCategories } from "../functions/category";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
 import { Spin, Card, Skeleton, Menu, Slider, Checkbox } from "antd";
-import { EuroOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import {
+    EuroOutlined,
+    UnorderedListOutlined,
+    StarOutlined,
+} from "@ant-design/icons";
+import StarFilter from "../components/forms/StarFilter";
+import StarRatings from "react-star-ratings";
 
 const { SubMenu, ItemGroup } = Menu;
 
@@ -18,6 +24,7 @@ const ShopPage = () => {
     const [priceChange, setPriceChange] = useState(false);
     const [categories, setCategories] = useState([]); // to show the categories in the sidebar
     const [categoryIds, setCategoryIds] = useState([]); // used to send to the backend
+    const [star, setStar] = useState(0);
 
     let dispatch = useDispatch();
     let { search } = useSelector((state) => ({ ...state }));
@@ -104,16 +111,35 @@ const ShopPage = () => {
         setCategoryIds(intheState);
         // console.log(intheState);
 
-        if(intheState.length === 0) {
+        if (intheState.length === 0) {
             loadAllProducts();
         } else {
             setLoading(true);
             fetchProducts({ category: intheState });
             setLoading(false);
         }
-
-
     };
+
+    // show products by average star rating
+
+    const handleStarClick = (newRating, name) => {
+        setStar(newRating);
+        fetchProducts({ stars: newRating })
+    };
+
+    const showStarRating = () => (
+        <div className="pb-2 pl-4 pr-4">
+            <StarRatings
+                changeRating={handleStarClick}
+                rating={star}
+                starDimension="22px"
+                starSpacing="4px"
+                starRatedColor="rgb(24, 144, 255)"
+                starHoverColor="rgb(24, 144, 255)"
+                numberOfStars={5}
+            />
+        </div>
+    );
 
     return (
         <div className="container-fluid">
@@ -122,7 +148,7 @@ const ShopPage = () => {
                     {/* Search & Filter Menu */}
                     <h4>Search / Filter</h4>
                     <hr />
-                    <Menu defaultOpenKeys={["1", "2"]} mode="inline">
+                    <Menu defaultOpenKeys={["1", "2", "3"]} mode="inline">
                         <SubMenu
                             key="1"
                             title={
@@ -152,6 +178,17 @@ const ShopPage = () => {
                             }
                         >
                             <div>{showCategories()}</div>
+                        </SubMenu>
+
+                        <SubMenu
+                            key="3"
+                            title={
+                                <span className="h6">
+                                    <StarOutlined /> Rating
+                                </span>
+                            }
+                        >
+                            <div>{showStarRating()}</div>
                         </SubMenu>
                     </Menu>
                 </div>
