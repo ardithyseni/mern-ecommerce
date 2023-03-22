@@ -42,7 +42,7 @@ const ShopPage = () => {
     const [subcategory, setSubcategory] = useState("");
     const [brands, setBrands] = useState([]);
     const [brand, setBrand] = useState("");
-    const [color, setColor] = useState([]);
+    const [shipping, setShipping] = useState("");
 
     let dispatch = useDispatch();
     let { search } = useSelector((state) => ({ ...state }));
@@ -190,9 +190,10 @@ const ShopPage = () => {
         return (
             <Radio.Group onChange={handleBrandChange} value={brand}>
                 <Space direction="vertical">
-
                     {brands.map((b) => (
-                        <Radio className="pl-4" key={b} value={b}>{b}</Radio>
+                        <Radio className="pl-4" key={b} value={b}>
+                            {b}
+                        </Radio>
                     ))}
                 </Space>
             </Radio.Group>
@@ -205,6 +206,34 @@ const ShopPage = () => {
         console.log(e.target.value);
         fetchProducts({ brand: e.target.value });
     };
+
+    const showShipping = () => {
+        return (
+            <>
+                <Checkbox
+                    className="pb-2 pl-4"
+                    onChange={handleShippingChange}
+                    value="Yes"
+                    checked={shipping === "Yes"}
+                >
+                    Yes
+                </Checkbox>
+                <Checkbox
+                    className="pb-2 pl-4"
+                    onChange={handleShippingChange}
+                    value="No"
+                    checked={shipping === "No"}
+                >
+                    No
+                </Checkbox>
+            </>
+        );
+    };
+
+    const handleShippingChange = (e) => {
+        setShipping(e.target.value);
+        fetchProducts({ shipping: e.target.value });
+    }
 
     return (
         <div className="container-fluid">
@@ -279,6 +308,17 @@ const ShopPage = () => {
                             }
                         >
                             <div className="pl-4">{showBrands()}</div>
+                        </SubMenu>
+
+                        <SubMenu
+                            key="6"
+                            title={
+                                <span className="h6">
+                                    <UnorderedListOutlined /> Shipping
+                                </span>
+                            }
+                        >
+                            <div className="pl-4">{showShipping()}</div>
                         </SubMenu>
                     </Menu>
                 </div>
