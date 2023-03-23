@@ -23,7 +23,17 @@ const Login = ({ history }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
-      if (user && user.token) history.push("/");
+    let isMounted = true;
+
+    if (user && user.token) {
+      if (isMounted) {
+        history.push("/");
+      }
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [user, history]);
 
   const roleBasedRedirect = (res) => {

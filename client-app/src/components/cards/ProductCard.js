@@ -1,47 +1,69 @@
-import React from "react";
-import { Skeleton, Card, Button, Popconfirm } from "antd";
+import React, { useState } from "react";
+import { Skeleton, Card, Button, Tooltip } from "antd";
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { showAverage } from "../../functions/rating";
+import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
 
 const { Meta } = Card;
 
 const ProductCard = ({ product, loading }) => {
     const { title, description, images, slug, price } = product;
+    const [tooltip, setTooltip] = useState("Click to add");
+
+    const { user, cart } = useSelector((state) => ({ ...state }));
+    const dispatch = useDispatch();
 
     const handleAddToCart = () => {
         // create empty cart array
-        let cart = [];
         if (typeof window !== "undefined") {
+            let cart = [];
             // if cart is in localstorage, get it
             if (localStorage.getItem("cart")) {
                 cart = JSON.parse(localStorage.getItem("cart"));
             }
-            // else, push new product to cart
-            cart.push({
-                ...product,
-                count: 1,
-            });
+            const existingProductIndex = cart.findIndex(
+                (item) => item._id === product._id
+              );
+              if (existingProductIndex !== -1) {
+                // if product exists, update count
+                cart[existingProductIndex].count += 1;
+              } else {
+                // else, add new product to cart
+                cart.push({
+                  ...product,
+                  count: 1,
+                });
+              }
+          
+              localStorage.setItem("cart", JSON.stringify(cart));
             // remove duplicates
-            let uniqueProducts = _.uniqWith(cart, _.isEqual);
             // save to local storage
-            localStorage.setItem("cart", JSON.stringify(uniqueProducts));
+            // let uniqueProducts = _.uniqWith(cart, _.isEqual);
+            // localStorage.setItem("cart", JSON.stringify(uniqueProducts));
+
+            // show hover tooltip
+            setTooltip("Added to cart!");
+
+            // add to redux state
+            dispatch({
+                type: "ADD_TO_CART",
+                payload: cart,
+            })
         }
     };
 
     return (
-        
-            <Card
-                hoverable
-                style={{
-                    width: 300,
-                    boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
-                    flexBasis: "calc(33.33% - 16px)", // 3 cards per row, with 16px of gutter space between them
-                }}
-                cover={
-                    <Link to={`/product/${slug}`}>
-
+        <Card
+            hoverable
+            style={{
+                width: 300,
+                boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
+                flexBasis: "calc(33.33% - 16px)", // 3 cards per row, with 16px of gutter space between them
+            }}
+            cover={
+                <Link to={`/product/${slug}`}>
                     <img
                         src={
                             images && images.length
@@ -57,43 +79,45 @@ const ProductCard = ({ product, loading }) => {
                             borderBottom: "1px solid lightgray",
                         }}
                     />
-                    </Link>
-                }
-                actions={[
-                    <Link to={`/product/${slug}`}>
-                        {/* <EyeOutlined key="eye" />, */}
-                        View Product
-                    </Link>,
+                </Link>
+            }
+            actions={[
+                <Link to={`/product/${slug}`}>
+                    {/* <EyeOutlined key="eye" />, */}
+                    View Product
+                </Link>,
+                <Tooltip title={tooltip}>
                     <a onClick={handleAddToCart}>
                         <ShoppingCartOutlined
                             style={{ fontSize: "23px" }}
                             type="button"
                             key="cart"
                         />
-                    </a>,
-                ]}
-            >
-                <Skeleton loading={loading}>
-                    <Meta
-                        title={title}
-                        description={
-                            <div>
-                                {description &&
-                                    description.substring(0, 60) + "..."}
-                                <br />
-                                <br />
-                                <b>{price} €</b>
-                                <br />
-                                {product &&
-                                product.ratings &&
-                                product.ratings.length > 0
-                                    ? showAverage(product)
-                                    : "No rating yet"}
-                            </div>
-                        }
-                    />
-                </Skeleton>
-            </Card>
+                    </a>
+                </Tooltip>,
+            ]}
+        >
+            <Skeleton loading={loading}>
+                <Meta
+                    title={title}
+                    description={
+                        <div>
+                            {description &&
+                                description.substring(0, 60) + "..."}
+                            <br />
+                            <br />
+                            <b>{price} €</b>
+                            <br />
+                            {product &&
+                            product.ratings &&
+                            product.ratings.length > 0
+                                ? showAverage(product)
+                                : "No rating yet"}
+                        </div>
+                    }
+                />
+            </Skeleton>
+        </Card>
     );
 };
 
