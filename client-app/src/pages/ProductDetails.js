@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { getProductBySlug, rateProductFunction, getRelated } from "../functions/product";
-import { useSelector } from "react-redux";
+import {
+    getProductBySlug,
+    rateProductFunction,
+    getRelated,
+} from "../functions/product";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { Card, Skeleton, Tabs, Descriptions, Tag } from "antd";
+import { Card, Skeleton, Tabs, Descriptions, Tag, Tooltip } from "antd";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
 import RatingModal from "../components/modal/RatingModal";
 import { showAverage } from "../functions/rating";
 import ProductCard from "../components/cards/ProductCard";
-
+import { useSelector, useDispatch } from "react-redux";
+import _ from "lodash";
 
 const { Meta } = Card;
 
@@ -19,8 +23,10 @@ const ProductDetails = ({ match }) => {
     const [loading, setLoading] = useState(true);
     const [star, setStar] = useState(0);
     const [relatedProducts, setRelatedProducts] = useState([]);
+    const [tooltip, setTooltip] = useState("Click to add");
 
-    const { user } = useSelector((state) => ({ ...state }));
+    const { user, cart } = useSelector((state) => ({ ...state }));
+    const dispatch = useDispatch();
 
     const {
         _id,
@@ -37,6 +43,45 @@ const ProductDetails = ({ match }) => {
 
     const { slug } = match.params;
 
+    const handleAddToCart = () => {
+        // create empty cart array
+        if (typeof window !== "undefined") {
+            let cart = [];
+            // if cart is in localstorage, get it
+            if (localStorage.getItem("cart")) {
+                cart = JSON.parse(localStorage.getItem("cart"));
+            }
+            const existingProductIndex = cart.findIndex(
+                (item) => item._id === product._id
+              );
+              if (existingProductIndex !== -1) {
+                // if product exists, update count
+                cart[existingProductIndex].count += 1;
+              } else {
+                // else, add new product to cart
+                cart.push({
+                  ...product,
+                  count: 1,
+                });
+              }
+          
+              localStorage.setItem("cart", JSON.stringify(cart));
+            // remove duplicates
+            // save to local storage
+            // let uniqueProducts = _.uniqWith(cart, _.isEqual);
+            // localStorage.setItem("cart", JSON.stringify(uniqueProducts));
+
+            // show hover tooltip
+            setTooltip("Added to cart!");
+
+            // add to redux state
+            dispatch({
+                type: "ADD_TO_CART",
+                payload: cart,
+            })
+        }
+    };
+
     useEffect(() => {
         loadProduct();
     }, [slug]);
@@ -46,9 +91,9 @@ const ProductDetails = ({ match }) => {
             let existingRatingObject = product.ratings.find(
                 (element) => element.postedBy.toString() === user._id.toString()
             );
-            existingRatingObject && setStar(existingRatingObject.star) // current user's star
+            existingRatingObject && setStar(existingRatingObject.star); // current user's star
         }
-    }, [product, user])
+    }, [product, user]);
 
     const loadProduct = () => {
         setLoading(true);
@@ -67,13 +112,12 @@ const ProductDetails = ({ match }) => {
 
     const onStarClick = (newRating, name) => {
         setStar(newRating);
-        console.table('newRating: ', newRating, name);
-        console.table('star: ', star, name);
-        rateProductFunction(name, newRating, user.token)
-            .then((res) => {
-                console.log('rating clicked', res.data);
-                // loadProduct(); // to show updated rating in real time
-            });
+        console.table("newRating: ", newRating, name);
+        console.table("star: ", star, name);
+        rateProductFunction(name, newRating, user.token).then((res) => {
+            console.log("rating clicked", res.data);
+            // loadProduct(); // to show updated rating in real time
+        });
     };
 
     return (
@@ -82,14 +126,8 @@ const ProductDetails = ({ match }) => {
             {/* Product image and details  START*/}
             <div className="row pt-4">
                 <div className="col-md-6">
-                    <Carousel
-                        showArrows={true}
-                        style={{ border: "1px solid lightgray" }}
-                    >
-                        {images &&
-                            images.map((i) => (
-                                <img src={i.url} key={i.public_id} />
-                            ))}
+                    <Carousel showArrows={true} style={{ border: "1px solid lightgray" }}>
+                        {images && images.map((i) => <img src={i.url} key={i.public_id} />)}
                     </Carousel>
 
                     <Tabs
@@ -125,7 +163,7 @@ const ProductDetails = ({ match }) => {
                         <Descriptions.Item span={3} label="Subcategories">
                             {subcategories.map((s) => (
                                 <Tag key={s._id}>
-                                <Link to={`/subcategory/${s.slug}`}>{s.name}</Link>
+                                    <Link to={`/subcategory/${s.slug}`}>{s.name}</Link>
                                 </Tag>
                             ))}
                         </Descriptions.Item>
@@ -145,16 +183,17 @@ const ProductDetails = ({ match }) => {
                     {/* <div>rating</div> */}
                     <Card
                         actions={[
-                            <>
-                                <ShoppingCartOutlined
-                                    className="text-success"
-                                    style={{ fontSize: "23px" }}
-                                    type="button"
-                                    key="cart"
-                                />
+                            <Tooltip title={tooltip}>
+                                <a onClick={handleAddToCart}>
+                                    <ShoppingCartOutlined
+                                        style={{ fontSize: "23px" }}
+                                        type="button"
+                                        key="cart"
+                                    />
+                                </a>
                                 <br />
                                 Add to Cart
-                            </>,
+                            </Tooltip>,
                             <Link to="/">
                                 <HeartOutlined
                                     className="text-danger"
@@ -187,8 +226,9 @@ const ProductDetails = ({ match }) => {
                                 }}
                                 description={
                                     <div className="custom-meta">
-                                        {product && product.ratings &&
-                                            product.ratings.length > 0 ? showAverage(product) : "No rating yet"}
+                                        {product && product.ratings && product.ratings.length > 0
+                                            ? showAverage(product)
+                                            : "No rating yet"}
                                     </div>
                                 }
                             />
@@ -207,14 +247,15 @@ const ProductDetails = ({ match }) => {
             </div>
 
             <div className="row pb-5">
-                {relatedProducts.length > 0 ?
-                    relatedProducts.map((r) =>
+                {relatedProducts.length > 0 ? (
+                    relatedProducts.map((r) => (
                         <div className="col-md-3" key={r._id}>
                             <ProductCard product={r} />
-                        </div>) :
-                    <div className="text-center col">
-                        No related products found.
-                    </div>}
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-center col">No related products found.</div>
+                )}
             </div>
         </div>
     );
