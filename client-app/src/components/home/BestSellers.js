@@ -1,5 +1,5 @@
 import { Skeleton, Card, Pagination } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ProductCard from "../cards/ProductCard";
 import { countProducts, getProductsByFilter } from "../../functions/product";
 
@@ -9,23 +9,43 @@ const BestSellers = () => {
   const [loading, setLoading] = useState(false);
   const [productsCount, setProductsCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
+  const isMounted = useRef(true);
 
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    }
+  }, [])
 
   useEffect(() => {
     loadAllProducts();
+
+    return () => {
+      isMounted.current = false;
+    };
   }, [pageNumber]);
 
   useEffect(() => {
-    countProducts().then((res) => setProductsCount(res.data));
+    countProducts().then((res) => {
+      if (isMounted.current) {
+        setProductsCount(res.data);
+      }
+    });
+    
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
 
-  const loadAllProducts = () => {
+  const loadAllProducts = async () => {
     setLoading(true);
     // getProductsByFilter(sort, order, pagenumber)
-    getProductsByFilter('sold', 'desc', pageNumber).then((res) => {
-      setProducts(res.data);
-      setLoading(false);
+    await getProductsByFilter('sold', 'desc', pageNumber).then((res) => {
+      if (isMounted.current) {
+        setProducts(res.data);
+        setLoading(false);
+      }
     });
   };
 

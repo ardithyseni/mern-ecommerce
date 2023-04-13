@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { getCategories } from '../../functions/category'
 import { Spin } from 'antd'
@@ -8,12 +8,26 @@ const CategoryList = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const isMounted = useRef(true);
+
+    useEffect(() => {
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
+
     useEffect(() => {
         setLoading(true);
-        getCategories().then(c => {
-            setCategories(c.data)
-            setLoading(false);
-        })
+        getCategories().then((c) => {
+            if (isMounted.current) {
+                setCategories(c.data);
+                setLoading(false);
+            }
+        });
+
+        return () => {
+            isMounted.current = false;
+        };
     }, []);
 
     const showCategories = () =>

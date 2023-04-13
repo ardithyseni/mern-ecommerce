@@ -29,6 +29,8 @@ import ProductDetails from './pages/ProductDetails';
 import CategoryHome from './pages/category/CategoryHome';
 import SubCategoryHome from './pages/subcategory/SubCategoryHome';
 import ShopPage from './pages/ShopPage';
+import Cart from './pages/Cart';
+
 
 const App = () => {
 
@@ -101,6 +103,7 @@ const App = () => {
         <Route exact path="/subcategory/:slug" component={SubCategoryHome} />
         
         <Route exact path="/shop" component={ShopPage} />
+        <Route exact path="/cart" component={Cart} />
         
       </Switch>
     </>

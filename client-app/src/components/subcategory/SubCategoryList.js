@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { getSubcategories } from '../../functions/subcategory'
 
@@ -9,13 +9,28 @@ const SubCategoryList = () => {
     const [subcategories, setSubcategories] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const isMounted = useRef(true);
+
+    useEffect(() => {
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
+
     useEffect(() => {
         setLoading(true);
-        getSubcategories().then(res => {
-            setSubcategories(res.data)
-            setLoading(false);
-        })
+        getSubcategories().then((res) => {
+            if (isMounted.current) {
+                setSubcategories(res.data);
+                setLoading(false);
+            }
+        });
+
+        return () => {
+            isMounted.current = false;
+        };
     }, []);
+
 
     const showSubcategories = () =>
         subcategories.map((s) => (
@@ -40,4 +55,4 @@ const SubCategoryList = () => {
     )
 }
 
-export default SubCategoryList
+export default SubCategoryList;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -20,19 +20,26 @@ const Login = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
   const { user } = useSelector((state) => ({ ...state }));
 
-  useEffect(() => {
-    let isMounted = true;
+  const isMounted = useRef(true);
 
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    }
+  }, [])
+
+  useEffect(() => {
     if (user && user.token) {
-      if (isMounted) {
+      if (isMounted.current) {
         history.push("/");
       }
     }
 
     return () => {
-      isMounted = false;
+      isMounted.current = false;
     };
   }, [user, history]);
 

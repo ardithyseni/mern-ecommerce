@@ -1,5 +1,5 @@
 import { Skeleton, Card, Pagination } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ProductCard from "../cards/ProductCard";
 import {
     getProductsByCount,
@@ -13,14 +13,19 @@ const NewArrivals = () => {
     const [productsCount, setProductsCount] = useState(0);
     const [pageNumber, setPageNumber] = useState(1);
 
+    const isMounted = useRef(true);
+
     useEffect(() => {
-        let isMounted = true;
-        if (isMounted) {
-            loadAllProducts();
-        }
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        loadAllProducts();
 
         return () => {
-            isMounted = false;
+            isMounted.current = false;
         };
     }, [pageNumber]);
 
@@ -49,10 +54,11 @@ const NewArrivals = () => {
 
     const loadAllProducts = async () => {
         setLoading(true);
-        // getProductsByFilter(sort, order, limit)
         await getProductsByFilter("createdAt", "desc", pageNumber).then((res) => {
-            setProducts(res.data);
-            setLoading(false);
+            if (isMounted.current) {
+                setProducts(res.data);
+                setLoading(false);
+            }
         });
     };
 
@@ -65,10 +71,7 @@ const NewArrivals = () => {
                         {[...Array(3)].map((_, index) => (
                             <div className="col-md-4" key={index}>
                                 <Card style={{ width: 300 }}>
-                                    <Skeleton
-                                        active
-                                        loading={loading}
-                                    ></Skeleton>
+                                    <Skeleton active loading={loading}></Skeleton>
                                 </Card>
                             </div>
                         ))}
@@ -76,14 +79,8 @@ const NewArrivals = () => {
                 ) : (
                     <div className="row">
                         {products.map((product) => (
-                            <div
-                                className="col-md-4 d-flex flex-wrap "
-                                key={product._id}
-                            >
-                                <ProductCard
-                                    product={product}
-                                    loading={loading}
-                                />
+                            <div className="col-md-4 d-flex flex-wrap " key={product._id}>
+                                <ProductCard product={product} loading={loading} />
                             </div>
                         ))}
                     </div>
