@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import ProductTableRow from '../components/cards/ProductTableRow';
 
 const Cart = () => {
     const { cart, user } = useSelector((state) => ({ ...state }));
@@ -18,10 +19,33 @@ const Cart = () => {
         //
     };
 
-      const handleLogin = () => {
+    const showCartItems = () => {
+        return (
+            <table className="table table-bordered">
+                <thead className="thead-light">
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Shipping</th>
+                        <th scope="col">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {cart.map((p) => (<ProductTableRow key={p._id} p={p} />) )}
+                </tbody>
+            </table>
+        )
+    }
+
+    const handleLogin = () => {
         localStorage.setItem("cartpage", "cart")
         history.push('/login');
-      };
+    };
 
     return (
         <div className="container-fluid pt-2">
@@ -33,7 +57,7 @@ const Cart = () => {
                             No products. <Link to="/">Continue Shopping.</Link>
                         </p>
                     ) : (
-                        "show cart items"
+                        showCartItems()
                     )}
                 </div>
                 <div className="col-md-4">
@@ -60,10 +84,10 @@ const Cart = () => {
                         </button>
                     ) : (
                         <button
-                              onClick={handleLogin}
+                            onClick={handleLogin}
                             className="btn btn-sm btn-primary mt-2"
                         >
-                        Log in to Checkout
+                            Log in to Checkout
                         </button>
                     )}
                 </div>
