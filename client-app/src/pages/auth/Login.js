@@ -116,9 +116,13 @@ const Login = ({ history }) => {
           });
           setLoading(false);
           const productSlug = localStorage.getItem("productSlug");
+          const redirectToCart = localStorage.getItem("cartpage")
           if (productSlug) {
             history.push(`/product/${productSlug}`);
             localStorage.removeItem("productSlug");
+          } else if(redirectToCart) {
+            history.push(`/${redirectToCart}`);
+            localStorage.removeItem("cartpage")
           } else {
             roleBasedRedirect(res);
           }
