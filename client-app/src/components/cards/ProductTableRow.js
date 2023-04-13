@@ -1,14 +1,17 @@
 import React from "react";
 import ModalImage from "react-modal-image";
 import { useDispatch } from "react-redux";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 
 const ProductTableRow = ({ p }) => {
-
   const dispatch = useDispatch();
 
   const handleCountChange = (e) => {
-
     let itemCount = e.target.value < 1 ? 1 : e.target.value;
 
     if (itemCount > p.quantity) {
@@ -18,8 +21,8 @@ const ProductTableRow = ({ p }) => {
 
     let cart = [];
 
-    if (typeof window !== 'undefined') {
-      if (localStorage.getItem('cart')) {
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
         cart = JSON.parse(localStorage.getItem("cart"));
       }
       cart.map((product, i) => {
@@ -28,14 +31,37 @@ const ProductTableRow = ({ p }) => {
         }
       });
 
-      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem("cart", JSON.stringify(cart));
       dispatch({
         type: "ADD_TO_CART",
-        payload: cart
-      })
+        payload: cart,
+      });
     }
   };
 
+  const handleRemoveItem = () => {
+    //
+    console.log(p._id, "to remove");
+
+    let cart = [];
+
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      cart.map((product, i) => {
+        if (product._id === p._id) {
+          cart.splice(i, 1);
+        }
+      });
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: cart,
+      });
+    }
+  };
 
   return (
     <tr>
@@ -60,8 +86,26 @@ const ProductTableRow = ({ p }) => {
           onChange={handleCountChange}
         />
       </td>
-      <td>{p.shipping}</td>
-      <td>Delete Icon</td>
+      <td className="text-center">
+        {p.shipping === "Yes" ? (
+          <CheckCircleOutlined
+            className="text-center text-success"
+            style={{ fontSize: "23px" }}
+          />
+        ) : (
+          <CloseCircleOutlined
+            className="text-center text-danger"
+            style={{ fontSize: "23px" }}
+          />
+        )}
+      </td>
+      <td className="text-center">
+        <CloseOutlined
+          style={{ cursor: "pointer", fontSize: "23px" }}
+          className="text-danger"
+          onClick={handleRemoveItem}
+        />
+      </td>
     </tr>
   );
 };
