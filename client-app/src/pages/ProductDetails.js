@@ -79,6 +79,12 @@ const ProductDetails = ({ match }) => {
                 type: "ADD_TO_CART",
                 payload: cart,
             })
+
+            // show cart items in side drawer
+            dispatch({
+                type: "SET_DRAWER_VISIBLE",
+                payload: true,
+            })
         }
     };
 
