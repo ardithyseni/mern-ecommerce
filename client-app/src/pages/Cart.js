@@ -16,7 +16,7 @@ const Cart = () => {
     };
 
     const saveOrderToDb = () => {
-        //
+        history.push("/checkout");
     };
 
     const showCartItems = () => {

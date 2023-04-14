@@ -31,6 +31,7 @@ import SubCategoryHome from './pages/subcategory/SubCategoryHome';
 import ShopPage from './pages/ShopPage';
 import Cart from './pages/Cart';
 import SideDrawer from './components/drawer/SideDrawer';
+import Checkout from './pages/Checkout';
 
 
 const App = () => {
@@ -106,6 +107,7 @@ const App = () => {
         
         <Route exact path="/shop" component={ShopPage} />
         <Route exact path="/cart" component={Cart} />
+        <Route exact path="/checkout" component={Checkout} />
         
       </Switch>
     </>
