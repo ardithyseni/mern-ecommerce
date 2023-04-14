@@ -30,6 +30,7 @@ import CategoryHome from './pages/category/CategoryHome';
 import SubCategoryHome from './pages/subcategory/SubCategoryHome';
 import ShopPage from './pages/ShopPage';
 import Cart from './pages/Cart';
+import SideDrawer from './components/drawer/SideDrawer';
 
 
 const App = () => {
@@ -77,6 +78,7 @@ const App = () => {
     <>
       <Header />
       <ToastContainer />
+      <SideDrawer />
       <Switch>
 
         <Route exact path="/" component={Home} />
