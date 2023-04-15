@@ -13,6 +13,7 @@ import categoryRoutes from './routes/category.js';
 import subcategoryRoutes from './routes/subcategory.js';
 import productRoutes from './routes/product.js';
 import cloudinaryRoutes from './routes/cloudinary.js';
+import userRoutes from './routes/user.js';
 
 // initialize app
 const app = express();
@@ -38,6 +39,7 @@ app.use('/api', categoryRoutes)
 app.use('/api', subcategoryRoutes)
 app.use('/api', productRoutes)
 app.use('/api', cloudinaryRoutes)
+app.use('/api', userRoutes)
 
 
 // readdirSync("./routes").map((r) => app.use("/api", import from "./routes/" + r);

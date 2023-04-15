@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import ProductTableRow from "../components/cards/ProductTableRow";
-import { userCart } from "../functions/userFunctions";
+import { saveUserCart } from "../functions/userFunctions";
 
 const Cart = () => {
   const { cart, user } = useSelector((state) => ({ ...state }));
@@ -18,7 +18,7 @@ const Cart = () => {
 
   const saveOrderToDb = () => {
     // console.log('cart' , JSON.stringify(cart, null, 4));
-    userCart(cart, user.token)
+    saveUserCart(cart, user.token)
       .then((res) => {
         console.log("cart post response", res);
         if (res.data.ok) history.push("/checkout");

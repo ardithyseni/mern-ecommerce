@@ -1,6 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserCart } from '../functions/userFunctions';
+
 
 const Checkout = () => {
+
+  const [products, setProducts] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => ({...state}));
+
+
+  useEffect(() => {
+    getUserCart(user.token)
+    .then((res) => {
+      console.log('user cart response', JSON.stringify(res.data, null, 4));
+      setProducts(res.data.products);
+      setTotal(res.data.cartTotal);
+
+    });
+  }, []);
 
   const saveAddressToDb = () => {
     //
@@ -22,7 +42,8 @@ const Checkout = () => {
 
       <div className='col-md-6'>
         Cart Summary
-
+        <h1>{total}</h1>
+        {JSON.stringify(products)}
         <div className='row'>
           <div className='col-md-6'>
             <button className='btn btn-primary'>Place Order</button>
