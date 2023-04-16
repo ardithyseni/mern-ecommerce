@@ -30,14 +30,13 @@ export const saveUserCart = async (req, res) => {
         products.push(object);
     }
 
-    console.log('products', products);
+    console.log("products", products);
 
     let cartTotal = 0;
     for (let i = 0; i < products.length; i++) {
         cartTotal = cartTotal + products[i].price * products[i].count;
-
     }
-    console.log('cartTotal', cartTotal)
+    console.log("cartTotal", cartTotal);
 
     let newCart = await new Cart({
         products: products,
@@ -45,18 +44,25 @@ export const saveUserCart = async (req, res) => {
         orderedBy: user._id,
     }).save();
 
-    console.log('new Cart', newCart);
+    console.log("new Cart", newCart);
     res.json({ ok: true });
 };
-
 
 export const getUserCart = async (req, res) => {
     const user = await User.findOne({ email: req.user.email }).exec();
 
     let cart = await Cart.findOne({ orderedBy: user._id })
-        .populate('products.product')
+        .populate("products.product")
         .exec();
 
     const { products, cartTotal, totalAfterDiscount } = cart;
     res.json({ products, cartTotal, totalAfterDiscount });
-}
+};
+
+export const emptyUserCart = async (req, res) => {
+    const user = await User.findOne({ email: req.user.email }).exec();
+
+    const cart = await Cart.findOneAndRemove({ orderedBy: user._id }).exec();
+
+    res.json(cart);
+};

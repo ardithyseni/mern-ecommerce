@@ -5,7 +5,7 @@ import User from '../models/user.js'
 // https://expressjs.com/en/guide/writing-middleware.html
 
 export const authCheck = async (req, res, next) => {
-    // console.log(req.headers); // token request
+    console.log(req.headers); // token request
     try {
         // const firebaseUser = await admin.auth()
         //     .verifyIdToken(req.headers.idToken,); // match from Login.js frontend
