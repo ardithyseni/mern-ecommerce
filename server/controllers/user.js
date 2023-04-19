@@ -24,8 +24,8 @@ export const saveUserCart = async (req, res) => {
         object.product = cart[i]._id;
         object.count = cart[i].count;
         // get price for total
-        let { price } = await Product.findById(cart[i]._id).select("price").exec();
-        object.price = price;
+        let productFromDb = await Product.findById(cart[i]._id).select("price").exec();
+        object.price = productFromDb.price;
 
         products.push(object);
     }
@@ -65,4 +65,15 @@ export const emptyUserCart = async (req, res) => {
     const cart = await Cart.findOneAndRemove({ orderedBy: user._id }).exec();
 
     res.json(cart);
+};
+
+export const saveUserAddress = async (req, res) => {
+    const userAddress = await User.findOneAndUpdate(
+        { email: req.user.email },
+        { address: req.body.address }
+    ).exec();
+
+    res.json({ ok: true });
+
+
 };
