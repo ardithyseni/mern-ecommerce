@@ -32,6 +32,7 @@ import ShopPage from './pages/ShopPage';
 import Cart from './pages/Cart';
 import SideDrawer from './components/drawer/SideDrawer';
 import Checkout from './pages/Checkout';
+import CreateCouponPage from './pages/admin/coupon/CreateCouponPage';
 
 
 const App = () => {
@@ -100,7 +101,8 @@ const App = () => {
         <AdminRoute exact path="/admin/product" component={ProductCreate} />
         <AdminRoute exact path="/admin/product/:slug" component={ProductUpdate} />
         <AdminRoute exact path="/admin/products" component={AllProducts} />
-        
+        <AdminRoute exact path="/admin/coupon" component={CreateCouponPage} />
+
         <Route exact path="/product/:slug" component={ProductDetails} />
         <Route exact path="/category/:slug" component={CategoryHome} />
         <Route exact path="/subcategory/:slug" component={SubCategoryHome} />
@@ -108,7 +110,7 @@ const App = () => {
         <Route exact path="/shop" component={ShopPage} />
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/checkout" component={Checkout} />
-        
+
       </Switch>
     </>
   );
