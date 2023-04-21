@@ -8,6 +8,7 @@ import {
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { applyCoupon } from "../functions/couponFunctions";
 
 const Checkout = () => {
   const [products, setProducts] = useState([]);
@@ -15,6 +16,9 @@ const Checkout = () => {
   const [address, setAddress] = useState("");
   const [savedAddress, setSavedAddress] = useState(false);
   const [coupon, setCoupon] = useState('');
+  // discount calculation
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
+  const [discountError, setDiscountError] = useState("");
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
@@ -23,6 +27,7 @@ const Checkout = () => {
     getUserCart(user?.token).then((res) => {
       console.log("user cart response", JSON.stringify(res.data, null, 4));
       setProducts(res.data.products);
+      console.log(products);
       setTotal(res.data.cartTotal);
     });
   }, [user]);
@@ -61,22 +66,23 @@ const Checkout = () => {
     return (
       <>
         <ReactQuill theme="snow" value={address} onChange={setAddress} />
-        <button className="btn btn-primary mt-2" onClick={saveAddressToDb}>
+        <button disabled={!address.length} className="btn btn-primary mt-2" onClick={saveAddressToDb}>
           Save
         </button>
       </>
     );
   };
 
-  const showProductSummary = () => {
-    {
-      products.map((p, i) => (
-        <div key={i}>
-          <p>{p.product.title}</p>
-        </div>
-      ));
-    }
-  };
+  const showProductSummary = () =>
+    products.map((p, i) => (
+      <div key={i}>
+        <h6 className="py-2">
+          {p.product.title} ({p.product.color}) x {p.count} = {" "}
+          {p.product.price * p.count} €
+        </h6>
+      </div>
+    ));
+
 
   const showApplyCouponInput = () => {
     return (
@@ -84,16 +90,30 @@ const Checkout = () => {
         <input
           type="text"
           value={coupon}
-          onChange={(e) => setCoupon(e.target.value)}
+          onChange={(e) => {
+            setCoupon(e.target.value.toUpperCase()) // Convert input to uppercase
+            setDiscountError("");
+          }}
           className="form-control"
         />
-        <button onClick={handleApplyCoupon} className="btn btn-primary mt-2">Apply Coupon</button>
+        <button disabled={!coupon.length} onClick={handleApplyCoupon} className="btn btn-primary mt-2">Apply Coupon</button>
       </>
     );
   };
 
   const handleApplyCoupon = () => {
-    console.log('coupon to send', coupon);
+    // console.log('coupon to send', coupon);
+    applyCoupon(coupon, user.token).then((res) => {
+      console.log('Res on coupon applied', res.data)
+      if (res.data) {
+        setTotalAfterDiscount(res.data)
+        // update coupon applied to redux 
+      }
+      if (res.data.err) {
+        setDiscountError(res.data.err);
+        // update coupon applied to redux 
+      }
+    })
   }
 
   return (
@@ -107,6 +127,8 @@ const Checkout = () => {
         <h4>Got a coupon?</h4>
         <br />
         {showApplyCouponInput()}
+        <br />
+        {discountError && <p className="text-danger p-2">{discountError}</p>}
       </div>
 
       <div className="col-md-6">
@@ -115,6 +137,12 @@ const Checkout = () => {
         <p>{products.length} Products</p>
         <hr />
         {showProductSummary()}
+        <hr />
+        <h5>Cart Total: {total} €</h5>
+        <br />
+        {totalAfterDiscount > 0 && (
+          <h5>Discounted price: {totalAfterDiscount} €</h5>
+        )}
         <div className="row">
           <div className="col-md-6">
             <button

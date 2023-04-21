@@ -110,4 +110,6 @@ export const applyUserCoupon = async (req, res) => {
     { totalAfterDiscount },
     { new: true }
   );
+
+  res.json(totalAfterDiscount);
 };
