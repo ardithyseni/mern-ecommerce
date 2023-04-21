@@ -10,12 +10,12 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { applyCoupon } from "../functions/couponFunctions";
 
-const Checkout = () => {
+const Checkout = ({history}) => {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [address, setAddress] = useState("");
   const [savedAddress, setSavedAddress] = useState(false);
-  const [coupon, setCoupon] = useState('');
+  const [couponValue, setCouponValue] = useState('');
   // discount calculation
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountError, setDiscountError] = useState("");
@@ -37,17 +37,17 @@ const Checkout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("cart");
     }
-
     // remove from redux
     dispatch({
       type: "ADD_TO_CART",
       payload: [],
     });
-
     // remove from backend
     emptyUserCart(user?.token).then((res) => {
       setProducts([]);
       setTotal(0);
+      setTotalAfterDiscount(0);
+      setCouponValue("")
       toast.success("Cart emptied. Continue shopping");
     });
   };
@@ -89,29 +89,37 @@ const Checkout = () => {
       <>
         <input
           type="text"
-          value={coupon}
+          value={couponValue}
           onChange={(e) => {
-            setCoupon(e.target.value.toUpperCase()) // Convert input to uppercase
+            setCouponValue(e.target.value.toUpperCase()) // Convert input to uppercase
             setDiscountError("");
           }}
           className="form-control"
         />
-        <button disabled={!coupon.length} onClick={handleApplyCoupon} className="btn btn-primary mt-2">Apply Coupon</button>
+        <button disabled={!couponValue.length} onClick={handleApplyCoupon} className="btn btn-primary mt-2">Apply Coupon</button>
       </>
     );
   };
 
   const handleApplyCoupon = () => {
     // console.log('coupon to send', coupon);
-    applyCoupon(coupon, user.token).then((res) => {
+    applyCoupon(couponValue, user.token).then((res) => {
       console.log('Res on coupon applied', res.data)
       if (res.data) {
         setTotalAfterDiscount(res.data)
-        // update coupon applied to redux 
+        // update coupon applied to redux
+        dispatch({
+          type: "COUPON_APPLIED",
+          payload: true
+        })
       }
       if (res.data.err) {
         setDiscountError(res.data.err);
-        // update coupon applied to redux 
+        // update coupon applied to redux
+        dispatch({
+          type: "COUPON_APPLIED",
+          payload: false
+        })
       }
     })
   }
@@ -148,6 +156,7 @@ const Checkout = () => {
             <button
               disabled={!savedAddress || !products.length}
               className="btn btn-primary"
+              onClick={() => history.push('/payment')}
             >
               Place Order
             </button>
