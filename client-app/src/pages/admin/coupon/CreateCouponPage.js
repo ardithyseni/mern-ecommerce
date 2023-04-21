@@ -1,21 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DeleteOutlined } from "@ant-design/icons";
 import AdminNav from "../../../components/nav/AdminNav";
-import { createCoupon } from "../../../functions/couponFunctions";
+import {
+  createCoupon,
+  getCoupons,
+  removeCoupon,
+} from "../../../functions/couponFunctions";
 
 const CreateCouponPage = () => {
   const [name, setName] = useState("");
   const [expiryDate, setExpiryDate] = useState(new Date());
   const [discount, setDiscount] = useState("");
   const [loading, setLoading] = useState("");
-  const [coupon, setCoupon] = useState("");
+  const [coupons, setCoupons] = useState([]);
+
   const today = new Date(); // get today's date
 
   const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    loadAllCoupons();
+  }, []);
+
+  const loadAllCoupons = () => getCoupons().then((res) => setCoupons(res.data));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,12 +35,25 @@ const CreateCouponPage = () => {
     createCoupon({ name, expiryDate, discount }, user.token)
       .then((res) => {
         setLoading(false);
+        loadAllCoupons();
         setName("");
         setDiscount("");
         setExpiryDate("");
-        toast.success(`Coupon ${res.data.name} is created`);
+        toast.success(`Coupon "${res.data.name}" is created`);
       })
       .catch((err) => console.log("create coupon error", err));
+  };
+
+  const handleRemoveCoupon = (couponId) => {
+    if (window.confirm("Delete this coupon?")) {
+      setLoading(true);
+      removeCoupon(couponId, user.token).then((res) => {
+        loadAllCoupons();
+        setLoading(false);
+        toast.message(`Coupon "${res.data.name}" deleted`);
+      })
+      .catch(err => console.log(err));
+    }
   };
 
   return (
@@ -77,6 +101,37 @@ const CreateCouponPage = () => {
             </div>
             <button className="btn btn-outline-primary">Create Coupon</button>
           </form>
+          <br />
+          <hr />
+          <br />
+          <h4>{coupons.length} coupons</h4>
+
+          <table className="table table-hover table-bordered w-auto mt-1">
+            <thead className="thead-light">
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Expiry Date</th>
+                <th scope="col">Discount</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {coupons.map((c) => (
+                <tr key={c._id}>
+                  <td>{c.name}</td>
+                  <td>{new Date(c.expiryDate).toLocaleDateString()}</td>
+                  <td>{c.discount} %</td>
+                  <td>
+                    <DeleteOutlined
+                      style={{ fontSize: "23px", cursor: "pointer" }}
+                      onClick={() => handleRemoveCoupon(c._id)}
+                      className="text-danger"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

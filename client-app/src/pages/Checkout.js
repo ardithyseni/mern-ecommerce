@@ -14,6 +14,7 @@ const Checkout = () => {
   const [total, setTotal] = useState(0);
   const [address, setAddress] = useState("");
   const [savedAddress, setSavedAddress] = useState(false);
+  const [coupon, setCoupon] = useState('');
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
@@ -56,20 +57,56 @@ const Checkout = () => {
     });
   };
 
+  const showAddress = () => {
+    return (
+      <>
+        <ReactQuill theme="snow" value={address} onChange={setAddress} />
+        <button className="btn btn-primary mt-2" onClick={saveAddressToDb}>
+          Save
+        </button>
+      </>
+    );
+  };
+
+  const showProductSummary = () => {
+    {
+      products.map((p, i) => (
+        <div key={i}>
+          <p>{p.product.title}</p>
+        </div>
+      ));
+    }
+  };
+
+  const showApplyCouponInput = () => {
+    return (
+      <>
+        <input
+          type="text"
+          value={coupon}
+          onChange={(e) => setCoupon(e.target.value)}
+          className="form-control"
+        />
+        <button onClick={handleApplyCoupon} className="btn btn-primary mt-2">Apply Coupon</button>
+      </>
+    );
+  };
+
+  const handleApplyCoupon = () => {
+    console.log('coupon to send', coupon);
+  }
+
   return (
     <div className="row">
       <div className="col-md-6">
         <h4>Delivery Address</h4>
         <br />
         <br />
-        <ReactQuill theme="snow" value={address} onChange={setAddress} />
-        <button className="btn btn-primary mt-2" onClick={saveAddressToDb}>
-          Save
-        </button>
+        {showAddress()}
         <hr />
-        <h4>Got Coupon?</h4>
+        <h4>Got a coupon?</h4>
         <br />
-        coupon input and apply button
+        {showApplyCouponInput()}
       </div>
 
       <div className="col-md-6">
@@ -77,11 +114,7 @@ const Checkout = () => {
         <hr />
         <p>{products.length} Products</p>
         <hr />
-        {products.map((p, i) => (
-          <div key={i}>
-            <p>{p.product.title}</p>
-          </div>
-        ))}
+        {showProductSummary()}
         <div className="row">
           <div className="col-md-6">
             <button
