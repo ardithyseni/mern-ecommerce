@@ -15,6 +15,7 @@ import productRoutes from './routes/product.js';
 import cloudinaryRoutes from './routes/cloudinary.js';
 import userRoutes from './routes/user.js';
 import couponRoutes from './routes/coupon.js';
+import stripeRoutes from './routes/stripe.js';
 
 // initialize app
 const app = express();
@@ -42,6 +43,7 @@ app.use('/api', productRoutes)
 app.use('/api', cloudinaryRoutes)
 app.use('/api', userRoutes)
 app.use('/api', couponRoutes)
+app.use('/api', stripeRoutes);
 
 
 // readdirSync("./routes").map((r) => app.use("/api", import from "./routes/" + r);
