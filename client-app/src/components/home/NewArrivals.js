@@ -2,9 +2,7 @@ import { Skeleton, Card, Pagination } from "antd";
 import React, { useEffect, useState, useRef } from "react";
 import ProductCard from "../cards/ProductCard";
 import {
-    getProductsByCount,
     getProductsByFilter,
-    countProducts,
 } from "../../functions/product";
 
 const NewArrivals = () => {

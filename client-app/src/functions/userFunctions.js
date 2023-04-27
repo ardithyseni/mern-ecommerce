@@ -45,3 +45,15 @@ export const saveUserAddress = async (idtoken, address) => {
         }
     )
 };
+
+export const createOrder = async (stripeResponse, idtoken) => {
+    return await axios.post(
+        `${process.env.REACT_APP_API}/user/order`,
+        { stripeResponse },
+        {
+            headers: {
+                idtoken
+            }
+        }
+    )
+};

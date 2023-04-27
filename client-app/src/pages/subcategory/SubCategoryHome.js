@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getSubcategory } from '../../functions/subcategory'
 import { Spin } from 'antd'
-import { Link } from 'react-router-dom'
 import ProductCard from '../../components/cards/ProductCard'
 
 

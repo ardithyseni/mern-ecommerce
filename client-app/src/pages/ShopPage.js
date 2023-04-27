@@ -5,11 +5,9 @@ import {
     fetchProductBrands,
 } from "../functions/product";
 import { getCategories } from "../functions/category";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
 import {
-    Spin,
     Card,
     Skeleton,
     Menu,
@@ -24,11 +22,10 @@ import {
     UnorderedListOutlined,
     StarOutlined,
 } from "@ant-design/icons";
-import StarFilter from "../components/forms/StarFilter";
 import StarRatings from "react-star-ratings";
 import { getSubcategories } from "../functions/subcategory";
 
-const { SubMenu, ItemGroup } = Menu;
+const { SubMenu } = Menu;
 
 const ShopPage = () => {
     const [products, setProducts] = useState([]);
@@ -44,7 +41,7 @@ const ShopPage = () => {
     const [brand, setBrand] = useState("");
     const [shipping, setShipping] = useState("");
 
-    let dispatch = useDispatch();
+    // let dispatch = useDispatch();
     let { search } = useSelector((state) => ({ ...state }));
     const { text } = search;
 

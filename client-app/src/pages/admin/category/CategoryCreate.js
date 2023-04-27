@@ -8,12 +8,9 @@ import {
   getCategories,
   removeCategory,
 } from "../../../functions/category";
-import { Button, Input } from "antd";
 import {
-  CheckOutlined,
   DeleteOutlined,
   EditOutlined,
-  LoadingOutlined,
 } from "@ant-design/icons";
 import CategoryForm from "../../../components/forms/CategoryForm";
 import SearchInput from "../../../components/forms/SearchInput";

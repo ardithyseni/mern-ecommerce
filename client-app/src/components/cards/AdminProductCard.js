@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Card, Button, Popconfirm } from "antd";
+import { Card, Popconfirm } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from 'react-router-dom';
 const { Meta } = Card;
@@ -31,6 +31,7 @@ const AdminProductCard = ({
                                 : "https://via.placeholder.com/300x200"
                         }
                         className="p-1"
+                        alt=''
                         style={{ // adjust the image size to fit within the fixed dimensions
                             objectFit: 'contain',
                             width: '300px',

@@ -3,8 +3,6 @@ import AdminNav from '../../../components/nav/AdminNav'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import { updateCategory, getCategory } from '../../../functions/category'
-import { Button } from 'antd';
-import { CheckOutlined, LoadingOutlined } from '@ant-design/icons'
 import CategoryForm from '../../../components/forms/CategoryForm'
 
 
@@ -41,39 +39,6 @@ const CategoryUpdate = ({ history, match }) => {
                 if (err.response.status === 400) toast.error(err.response.data);
             });
     };
-
-
-    // const categoryForm = () => (
-
-    //     <form onSubmit={handleSubmit}>
-
-    //         <div className="form-group">
-    //             <input
-    //                 type="text"
-    //                 className="form-control"
-    //                 placeholder="New category name"
-    //                 value={name}
-    //                 onChange={(e) => setName(e.target.value)}
-    //                 autoFocus
-    //                 required
-    //             />
-    //         </div>
-
-    //         <br />
-    //         <Button
-    //             onClick={handleSubmit}
-    //             type="primary"
-    //             block
-    //             size="large"
-    //             shape="round"
-    //             icon={loading ? <LoadingOutlined /> : <CheckOutlined />}
-    //             className="mb-2"
-    //             disabled={name.length < 2}
-    //         >
-    //             Update name
-    //         </Button>
-    //     </form>
-    // )
 
     return (
         <div className="container-fluid">

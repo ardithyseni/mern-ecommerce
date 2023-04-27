@@ -27,7 +27,7 @@ const CategoryForm = ({ handleSubmit, name, buttonName,setName, loading }) => {
                 shape="round"
                 icon={loading ? <LoadingOutlined /> : <CheckOutlined />}
                 className="mb-2"
-                disabled={name.length < 2}
+                disabled={name?.length < 2}
             >
                 {buttonName}
             </Button>

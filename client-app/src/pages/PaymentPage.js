@@ -1,10 +1,7 @@
 import React from 'react'
 import { loadStripe } from '@stripe/stripe-js';
 import {
-  CardElement,
   Elements,
-  useStripe,
-  useElements,
 } from '@stripe/react-stripe-js';
 import StripeCheckout from '../components/forms/StripeCheckout';
 import '../stripe.css';

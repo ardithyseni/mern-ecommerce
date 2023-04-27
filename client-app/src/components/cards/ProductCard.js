@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Skeleton, Card, Button, Tooltip } from "antd";
-import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { Skeleton, Card, Tooltip } from "antd";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { showAverage } from "../../functions/rating";
-import { useSelector, useDispatch } from "react-redux";
-import _ from "lodash";
+import { useDispatch } from "react-redux";
 
 const { Meta } = Card;
 
@@ -12,7 +11,7 @@ const ProductCard = ({ product, loading }) => {
     const { title, description, images, slug, price } = product;
     const [tooltip, setTooltip] = useState("Click to add");
 
-    const { user, cart } = useSelector((state) => ({ ...state }));
+    // const { user, cart } = useSelector((state) => ({ ...state }));
     const dispatch = useDispatch();
 
     const handleAddToCart = () => {
@@ -76,6 +75,7 @@ const ProductCard = ({ product, loading }) => {
                                 ? images[0].url
                                 : "https://via.placeholder.com/300x200"
                         }
+                        alt={title}
                         className="p-1"
                         style={{
                             // adjust the image size to fit within the fixed dimensions

@@ -1,5 +1,5 @@
 import React from "react";
-import { Drawer, Button } from "antd";
+import { Drawer } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -32,7 +32,7 @@ const SideDrawer = () => {
       {cart.map((p) => (
         <div key={p._id} className="row my-4">
           <div className="col">
-            <img src={p.images[0].url} style={drawerImageStyle} />
+            <img src={p.images[0].url} alt="" style={drawerImageStyle} />
             <p className="text-center bg-secondary text-light">{p.title} x {p.count}</p>
           </div>
         </div>

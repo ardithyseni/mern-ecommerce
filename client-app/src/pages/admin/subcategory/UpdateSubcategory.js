@@ -33,6 +33,10 @@ const UpdateSubcategory = ({ history, match }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!parent) {
+            toast.error(`Please select a parent category`);
+            return;
+        }
         setLoading(true);
         updateSubcategory(match.params.slug, { name, parent }, user.token)
             .then((res) => {
