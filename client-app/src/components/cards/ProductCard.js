@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Skeleton, Card, Tooltip } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, ProfileOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { showAverage } from "../../functions/rating";
 import { useDispatch } from "react-redux";
@@ -24,19 +24,19 @@ const ProductCard = ({ product, loading }) => {
             }
             const existingProductIndex = cart.findIndex(
                 (item) => item._id === product._id
-              );
-              if (existingProductIndex !== -1) {
+            );
+            if (existingProductIndex !== -1) {
                 // if product exists, update count
                 cart[existingProductIndex].count += 1;
-              } else {
+            } else {
                 // else, add new product to cart
                 cart.push({
-                  ...product,
-                  count: 1,
+                    ...product,
+                    count: 1,
                 });
-              }
-          
-              localStorage.setItem("cart", JSON.stringify(cart));
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
             // remove duplicates
             // save to local storage
             // let uniqueProducts = _.uniqWith(cart, _.isEqual);
@@ -89,16 +89,23 @@ const ProductCard = ({ product, loading }) => {
             }
             actions={[
                 <Link to={`/product/${slug}`}>
-                    {/* <EyeOutlined key="eye" />, */}
+                    <ProfileOutlined className="text-info" style={{ fontSize: "23px" }}
+                        type="button"
+                        key="view"
+                    />
+                    <br />
                     View Product
                 </Link>,
                 <Tooltip title={tooltip}>
-                    <a onClick={handleAddToCart}>
+                    <a onClick={handleAddToCart} disabled={product.quantity < 1}>
                         <ShoppingCartOutlined
+                            className="text-info"
                             style={{ fontSize: "23px" }}
                             type="button"
                             key="cart"
                         />
+                        <br />
+                        {product.quantity < 1 ? 'Out of stock' : 'Add to Cart'}
                     </a>
                 </Tooltip>,
             ]}
@@ -115,8 +122,8 @@ const ProductCard = ({ product, loading }) => {
                             <b>{price} €</b>
                             <br />
                             {product &&
-                            product.ratings &&
-                            product.ratings.length > 0
+                                product.ratings &&
+                                product.ratings.length > 0
                                 ? showAverage(product)
                                 : "No rating yet"}
                         </div>

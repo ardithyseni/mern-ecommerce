@@ -1,6 +1,6 @@
 import express from "express";
 import { authCheck } from "./../middlewares/auth.js";
-import { saveUserCart, getUserCart, emptyUserCart, saveUserAddress, createOrder, applyUserCoupon } from "../controllers/user.js";
+import { saveUserCart, getUserCart, listOrders, emptyUserCart, saveUserAddress, createOrder, applyUserCoupon } from "../controllers/user.js";
 
 const router = express.Router();
 
@@ -14,5 +14,7 @@ router.post('/user/cart/coupon', authCheck, applyUserCoupon);
 
 // order routes
 router.post('/user/order', authCheck, createOrder);
+router.get('/user/orders', authCheck, listOrders);
+
 
 export default router;

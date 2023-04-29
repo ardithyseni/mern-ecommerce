@@ -106,7 +106,7 @@ export const applyUserCoupon = async (req, res) => {
     (cartTotal * validCoupon.discount) / 100
   ).toFixed(2);
 
-  console.log('---totalafterdiscount---->', totalAfterDiscount)
+  console.log("---totalafterdiscount---->", totalAfterDiscount);
 
   Cart.findOneAndUpdate(
     { orderedBy: user._id },
@@ -127,11 +127,34 @@ export const createOrder = async (req, res) => {
   let newOrder = await new Order({
     products,
     paymentIntent,
-    orderedBy: user._id
+    orderedBy: user._id,
   }).save();
 
-  console.log('new order saved', newOrder);
+  // decrement product quantity, increment sold
+  let bulkOption = products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item.product._id }, // IMPORTANT item.product
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+
+  let updatedProduct = await Product.bulkWrite(bulkOption, {});
+
+  console.log("product updated sold and quantity", updatedProduct);
+
+  console.log("new order saved", newOrder);
 
   res.json({ ok: true });
+};
 
-}
+export const listOrders = async (req, res) => {
+  let user = await User.findOne({ email: req.user.email }).exec();
+
+  let userOrders = await Order.find({ orderedBy: user._id })
+    .populate("products.product")
+    .exec();
+
+  res.json(userOrders);
+};
