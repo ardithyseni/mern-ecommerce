@@ -4,6 +4,7 @@ import { getUserOrders } from '../../functions/userFunctions';
 import { useSelector } from 'react-redux';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { formatDateTime } from '../../utils/dateFormatter';
+import PaymentInfo from '../../components/cards/PaymentInfo';
 
 const UserHistory = () => {
 
@@ -58,7 +59,7 @@ const UserHistory = () => {
 
   const showOrders = () => orders.map((order, i) => (
     <div key={i} className='m-5 p-3 card shadow'style={{ boxShadow: '0 0 5px rgba(0, 0, 0, 0.2)' }}>
-      <p>payment info</p>
+      <PaymentInfo order={order} />
       {showOrdersTable(order)}
       <div className='row'>
         <div className='col'>
