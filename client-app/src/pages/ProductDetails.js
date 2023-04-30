@@ -15,6 +15,8 @@ import { showAverage } from "../functions/rating";
 import ProductCard from "../components/cards/ProductCard";
 import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
+import { addToWishlist } from "../functions/userFunctions";
+import { toast } from 'react-toastify';
 
 const { Meta } = Card;
 
@@ -53,19 +55,19 @@ const ProductDetails = ({ match }) => {
             }
             const existingProductIndex = cart.findIndex(
                 (item) => item._id === product._id
-              );
-              if (existingProductIndex !== -1) {
+            );
+            if (existingProductIndex !== -1) {
                 // if product exists, update count
                 cart[existingProductIndex].count += 1;
-              } else {
+            } else {
                 // else, add new product to cart
                 cart.push({
-                  ...product,
-                  count: 1,
+                    ...product,
+                    count: 1,
                 });
-              }
-          
-              localStorage.setItem("cart", JSON.stringify(cart));
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
             // remove duplicates
             // save to local storage
             // let uniqueProducts = _.uniqWith(cart, _.isEqual);
@@ -125,6 +127,15 @@ const ProductDetails = ({ match }) => {
             // loadProduct(); // to show updated rating in real time
         });
     };
+
+
+    const handleAddToWishlist = (e) => {
+        e.preventDefault();
+        addToWishlist(product._id, user?.token).then((res) => {
+            console.log("added to wishlist", res.data);
+            toast.success("Added to wishlist")
+        })
+    }
 
     return (
         <div className="container-fluid px-5">
@@ -200,7 +211,7 @@ const ProductDetails = ({ match }) => {
                                 <br />
                                 Add to Cart
                             </Tooltip>,
-                            <Link to="/">
+                            <a onClick={handleAddToWishlist}>
                                 <HeartOutlined
                                     className="text-danger"
                                     style={{ fontSize: "23px" }}
@@ -209,7 +220,8 @@ const ProductDetails = ({ match }) => {
                                 />
                                 <br />
                                 Add to Wishlist
-                            </Link>,
+                            </a>
+                            ,
                             <RatingModal>
                                 <StarRatings
                                     name={_id}
