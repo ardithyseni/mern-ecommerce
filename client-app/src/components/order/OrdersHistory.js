@@ -1,7 +1,46 @@
 import React from "react";
 import PaymentInfo from "../cards/PaymentInfo";
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { formatDateTime } from "../../utils/dateFormatter";
 
 const OrdersHistory = ({ orders, handleStatusChange }) => {
+
+  const showOrdersTable = (order) => {
+    return (
+      <table className='table table-hover table-bordered w-auto mt-1'>
+        <thead className='thead-light'>
+          <tr>
+            <th scope='col'>Title</th>
+            <th scope='col'>Price</th>
+            <th scope='col'>Brand</th>
+            <th scope='col'>Color</th>
+            <th scope='col'>Count</th>
+            <th scope='col'>Time</th>
+            <th scope='col'>Shipping</th>
+          </tr>
+        </thead>
+        <tbody>
+          {order.products.map((p, i) => (
+            <tr key={i}>
+              <td><b>{p.product.title}</b></td>
+              <td>{p.product.price} €</td>
+              <td>{p.product.brand}</td>
+              <td>{p.product.color}</td>
+              <td>{p.count}</td>
+              <td>{formatDateTime(order.createdAt)}</td>
+              <td>{p.product.shipping === "Yes" ? (
+                <CheckCircleOutlined style={{ color: 'green' }} />
+              ) : (
+                <CloseCircleOutlined style={{ color: "red" }} />
+              )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )
+  }
+
   return (
     <>
       {orders.map((order) => (
@@ -31,6 +70,7 @@ const OrdersHistory = ({ orders, handleStatusChange }) => {
               </div>
             </div>
           </div>
+          {showOrdersTable(order)}
         </div>
       ))}
     </>
