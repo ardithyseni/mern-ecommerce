@@ -52,6 +52,18 @@ export const createOrder = async (stripeResponse, idtoken) => {
   );
 };
 
+export const createPayWithCashOrder = async (idtoken, cashOnDelivery) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API}/user/cash-order`,
+    { cashOnDelivery },
+    {
+      headers: {
+        idtoken,
+      },
+    }
+  );
+};
+
 export const getUserOrders = async (idtoken) => {
   return await axios.get(`${process.env.REACT_APP_API}/user/orders`, {
     headers: {
@@ -93,3 +105,5 @@ export const addToWishlist = async (productId, idtoken) => {
     }
   );
 };
+
+

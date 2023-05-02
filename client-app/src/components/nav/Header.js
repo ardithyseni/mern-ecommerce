@@ -20,7 +20,7 @@ const { SubMenu, Item } = Menu;
 const Header = () => {
   const [current, setCurrent] = useState("home");
   let dispatch = useDispatch();
-  let {user, cart} = useSelector((state) => ({...state}));
+  let { user, cart } = useSelector((state) => ({ ...state }));
   // console.log(user)
   let history = useHistory();
 
@@ -34,10 +34,10 @@ const Header = () => {
     auth.signOut();
     dispatch({
       type: "LOGOUT",
-      payload: null
+      payload: null,
     });
 
-    history.push('/login');
+    history.push("/login");
   };
 
   return (
@@ -45,11 +45,11 @@ const Header = () => {
       <Item key="home" icon={<AppstoreOutlined />}>
         <Link to="/">Home</Link>
       </Item>
-      
+
       <Item key="shop" icon={<ShoppingOutlined />}>
         <Link to="/shop">Shop</Link>
       </Item>
-      
+
       <Item key="cart" icon={<ShoppingCartOutlined />}>
         <Link to="/cart">
           <Badge count={cart.length} offset={[9, 0]}>
@@ -67,24 +67,30 @@ const Header = () => {
       {!user && (
         <Item key="login" icon={<UserOutlined />} className="float-right">
           <Link to="/login">Login</Link>
-        </Item>)}
+        </Item>
+      )}
 
       {user && (
-        <SubMenu icon={<SettingOutlined />} title={user.email && user.email.split('@')[0]} className="float-right">
-          
-          {user && user.role === 'subscriber' && (
+        <SubMenu
+          icon={<SettingOutlined />}
+          title={user.email && user.email.split("@")[0]}
+          className="float-right"
+        >
+          {user && user.role === "subscriber" && (
+              <Item key="dashboard">
+                <Link to="/user/history">Dashboard</Link>
+              </Item>
+          )}
+
+          {user && user.role === "admin" && (
             <Item>
-              <Link to ='/user/history'>Dashboard</Link>
+              <Link to="/admin/dashboard">Dashboard</Link>
             </Item>
           )}
 
-          {user && user.role === 'admin' && (
-            <Item>
-              <Link to ='/admin/dashboard'>Dashboard</Link>
-            </Item>
-          )}
-          
-          <Item icon={<LogoutOutlined />} onClick={logout}>Logout</Item>
+          <Item icon={<LogoutOutlined />} onClick={logout}>
+            Logout
+          </Item>
         </SubMenu>
       )}
       <span className="float-right p-1">

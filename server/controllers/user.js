@@ -3,6 +3,7 @@ import Product from "../models/product.js";
 import Cart from "../models/cart.js";
 import Coupon from "../models/coupon.js";
 import Order from "../models/order.js";
+import { v4 as uuidv4 } from 'uuid';
 
 export const saveUserCart = async (req, res) => {
   console.log(req.body); // cart item
@@ -132,6 +133,52 @@ export const createOrder = async (req, res) => {
 
   // decrement product quantity, increment sold
   let bulkOption = products.map((item) => {
+    return {
+      updateOne: {
+        filter: { _id: item.product._id }, // IMPORTANT item.product
+        update: { $inc: { quantity: -item.count, sold: +item.count } },
+      },
+    };
+  });
+
+  let updatedProduct = await Product.bulkWrite(bulkOption, {});
+
+  console.log("product updated sold and quantity", updatedProduct);
+
+  console.log("new order saved", newOrder);
+
+  res.json({ ok: true });
+};
+
+export const createCashOrder = async (req, res) => {
+
+  const { cashOnDelivery } = req.body;
+
+  // if cashOnDelivery is true, create order with status of cash on Delivery
+
+  if (!cashOnDelivery) {
+    return res.status(400).send('create cash order failed')
+  }
+
+  const user = await User.findOne({ email: req.user.email }).exec();
+
+  let userCart = await Cart.findOne({ orderedBy: user._id }).exec();
+
+  let newOrder = await new Order({
+    products: userCart.products,
+    paymentIntent: {
+      id: uuidv4(),
+      amount: userCart.cartTotal,
+      currency: "eur",
+      status: "Cash on Delivery",
+      created: new Date().toLocaleString('en-DE', { timeZone: 'Europe/Vienna' }),
+      payment_method_type: 'Cash'
+    },
+    orderedBy: user._id,
+  }).save();
+
+  // decrement product quantity, increment sold
+  let bulkOption = userCart.products.map((item) => {
     return {
       updateOne: {
         filter: { _id: item.product._id }, // IMPORTANT item.product

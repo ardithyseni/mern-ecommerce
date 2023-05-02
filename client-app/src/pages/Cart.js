@@ -27,6 +27,23 @@ const Cart = () => {
         console.log("cart save error", error);
       });
   };
+  
+  const saveCashOnDelivery = () => {
+    // same as saveOrderToDb, but also update the c.o.d.
+    dispatch({
+      type: "CASH_ON_DELIVERY",
+      payload: true,
+    });
+
+    saveUserCart(cart, user.token)
+      .then((res) => {
+        console.log("cart post response", res);
+        if (res.data.ok) history.push("/checkout");
+      })
+      .catch((error) => {
+        console.log("cart save error", error);
+      });
+  };
 
   const showCartItems = () => {
     return (
@@ -85,6 +102,7 @@ const Cart = () => {
           Total: <b>{getTotal()} €</b>
           <hr />
           {user ? (
+            <>
             <button
               onClick={saveOrderToDb}
               disabled={!cart.length}
@@ -92,6 +110,15 @@ const Cart = () => {
             >
               Proceed to Checkout
             </button>
+            <hr />
+            <button
+              onClick={saveCashOnDelivery}
+              disabled={!cart.length}
+              className="btn btn-sm btn-warning mt-2"
+            >
+              Pay Cash on Delivery
+            </button>
+            </>
           ) : (
             <button
               onClick={handleLogin}
