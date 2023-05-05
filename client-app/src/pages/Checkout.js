@@ -4,7 +4,7 @@ import {
   emptyUserCart,
   getUserCart,
   saveUserAddress,
-  createPayWithCashOrder
+  createPayWithCashOrder,
 } from "../functions/userFunctions";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
@@ -135,11 +135,33 @@ const Checkout = ({ history }) => {
   };
 
   const createCashOrder = () => {
-    createPayWithCashOrder(user?.token, cashOnDelivery).then((res) => {
-      console.log('user pay with cash created', res);
-      // empty cart from redux & local storage, reset coupon, reset c.o.d, redirect
-      
-    })
+    createPayWithCashOrder(user?.token, cashOnDelivery, couponValue).then((res) => {
+      console.log("user pay with cash created", res);
+
+      // empty from local storage
+      if (typeof window !== "undefined") localStorage.removeItem("cart");
+      // empty cart from redux
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: [],
+      });
+      // empty coupon in redux
+      dispatch({
+        type: "COUPON_APPLIED",
+        payload: false,
+      });
+      // empty cashondelivery redux
+      dispatch({
+        type: "CASH_ON_DELIVERY",
+        payload: false,
+      });
+      // empty cart in backend
+      emptyUserCart(user?.token);
+      // redirect
+      setTimeout(() => {
+        history.push("/user/history");
+      }, 1000);
+    });
   };
 
   return (

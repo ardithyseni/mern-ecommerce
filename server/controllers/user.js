@@ -152,7 +152,7 @@ export const createOrder = async (req, res) => {
 
 export const createCashOrder = async (req, res) => {
 
-  const { cashOnDelivery } = req.body;
+  const { cashOnDelivery, couponApplied } = req.body;
 
   // if cashOnDelivery is true, create order with status of cash on Delivery
 
@@ -164,17 +164,26 @@ export const createCashOrder = async (req, res) => {
 
   let userCart = await Cart.findOne({ orderedBy: user._id }).exec();
 
+  let finalAmount = 0;
+
+    if (couponApplied && userCart.totalAfterDiscount) {
+        finalAmount = userCart.totalAfterDiscount * 100;
+    } else {
+        finalAmount = userCart.cartTotal * 100;
+    }
+
   let newOrder = await new Order({
     products: userCart.products,
     paymentIntent: {
       id: uuidv4(),
-      amount: userCart.cartTotal,
+      amount: finalAmount,
       currency: "eur",
       status: "Cash on Delivery",
       created: new Date().toLocaleString('en-DE', { timeZone: 'Europe/Vienna' }),
       payment_method_type: 'Cash'
     },
     orderedBy: user._id,
+    orderStatus: "Cash on Delivery" 
   }).save();
 
   // decrement product quantity, increment sold

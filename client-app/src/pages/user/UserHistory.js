@@ -61,7 +61,7 @@ const UserHistory = () => {
 
 
 
-  const showOrders = () => orders.map((order, i) => (
+  const showOrders = () => orders.reverse().map((order, i) => (
     <div key={i} className='m-5 p-3 card shadow' style={{ boxShadow: '0 0 5px rgba(0, 0, 0, 0.2)' }}>
       <PaymentInfo order={order} />
       {showOrdersTable(order)}
