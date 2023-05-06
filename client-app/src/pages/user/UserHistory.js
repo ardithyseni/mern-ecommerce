@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { formatDateTime, formatDateTimeFile } from '../../utils/dateFormatter';
 import PaymentInfo from '../../components/cards/PaymentInfo';
-import { PDFDownloadLink, Page, Document, View, Text } from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import Invoice from '../../components/order/Invoice';
 
 const UserHistory = () => {
